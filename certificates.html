@@ -1,0 +1,931 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Certificate Verification | PBFL School System</title>
+<meta name="description" content="Verify and download student certificates across all PBFL Practical Based Academy courses using a serial number.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="style.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+/* ===================== CERTIFICATE PAGE — component styles only ===================== */
+:root{
+  --gradient-purple: linear-gradient(135deg, var(--purple) 0%, #3d2154 100%);
+}
+
+/* ---------- Hero ---------- */
+.verify-hero{ background:var(--gradient-primary); color:var(--white); padding-block:56px 120px; text-align:center; position:relative; overflow:hidden; }
+.verify-hero::before{ content:""; position:absolute; inset:0; background:
+    radial-gradient(circle at 10% 15%, rgba(254,204,2,.18), transparent 42%),
+    radial-gradient(circle at 90% 85%, rgba(249,165,26,.16), transparent 46%); }
+.verify-hero__inner{ position:relative; z-index:1; }
+.verify-hero .eyebrow{ font-weight:700; letter-spacing:.14em; text-transform:uppercase; font-size:.72rem; color:var(--secondary); margin-bottom:14px; }
+.verify-hero h1{ color:var(--white); font-size:clamp(1.9rem, 4vw, 2.7rem); font-weight:800; margin-bottom:12px; letter-spacing:-.01em; }
+.verify-hero p{ max-width:560px; margin:0 auto; font-size:.95rem; color:rgba(255,255,255,.85); }
+
+/* ---------- Search ---------- */
+.search-wrap{ max-width:640px; margin:-56px auto 0; padding:0 20px; position:relative; z-index:2; }
+.search-card{ background:var(--white); border-radius:var(--radius); box-shadow:var(--shadow-lg); padding:22px; display:flex; gap:12px; border:1px solid var(--border); }
+#serialInput{ flex:1; border:1px solid var(--border); border-radius:var(--radius-sm); padding:14px 16px; font-size:1rem; font-family:var(--font-base); letter-spacing:.03em; color:var(--text); outline:none; text-transform:uppercase; }
+#serialInput:focus{ border-color:var(--gold); box-shadow:0 0 0 3px rgba(249,165,26,.18); }
+#searchBtn{ background:var(--primary); color:var(--white); border:none; border-radius:var(--radius-sm); padding:0 30px; font-family:var(--font-base); font-weight:600; font-size:.85rem; letter-spacing:.03em; cursor:pointer; transition:background .2s ease, transform .2s ease; display:inline-flex; align-items:center; gap:8px; }
+#searchBtn:hover{ background:var(--primary-dark); transform:translateY(-2px); }
+.hint{ text-align:center; font-size:.78rem; color:#8a8a8a; margin-top:12px; }
+
+/* ---------- Result area ---------- */
+main.verify-main{ max-width:760px; margin:0 auto; padding:52px 20px 20px; min-height:260px; }
+.state{ text-align:center; color:#8a8a8a; font-size:.92rem; padding-top:20px; display:none; }
+.state.show{ display:block; }
+.state .big{ font-size:2.4rem; display:block; margin-bottom:10px; color:var(--gold); }
+.state.error{ color:var(--primary-dark); }
+.state.error .big{ color:var(--primary); }
+
+.result{ display:none; animation:fadeUp .35s ease both; }
+.result.show{ display:block; }
+@keyframes fadeUp{ from{ opacity:0; transform:translateY(10px); } to{ opacity:1; transform:translateY(0); } }
+
+.result-header{ display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:18px; flex-wrap:wrap; }
+.badge-group{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+.badge{ font-size:.68rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; background:rgba(249,165,26,.14); color:var(--maroon); border:1px solid rgba(249,165,26,.45); padding:6px 14px; border-radius:var(--radius-pill); display:inline-flex; align-items:center; gap:6px; }
+.badge-course{ background:rgba(220,41,25,.08); color:var(--primary-dark); border-color:rgba(220,41,25,.3); }
+.meta{ text-align:right; }
+.meta .name{ font-size:1.25rem; font-weight:700; color:var(--heading); }
+.meta .serial{ font-size:.78rem; color:#8a8a8a; letter-spacing:.04em; }
+
+.cert-frame{ border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; box-shadow:var(--shadow); background:var(--white); }
+.cert-frame img{ width:100%; height:auto; display:block; }
+
+.actions{ display:flex; gap:12px; margin-top:18px; flex-wrap:wrap; }
+.actions a{ font-size:.82rem; font-weight:600; letter-spacing:.02em; padding:12px 22px; border-radius:var(--radius-sm); display:inline-flex; align-items:center; gap:8px; transition:transform .2s ease, box-shadow .2s ease, background .2s ease; }
+.btn-primary{ background:var(--gradient-primary); color:var(--white); box-shadow:0 8px 20px rgba(220,41,25,.3); }
+.btn-primary:hover{ transform:translateY(-2px); box-shadow:0 12px 26px rgba(220,41,25,.38); }
+.btn-secondary{ background:var(--gradient-gold); color:var(--heading); box-shadow:0 8px 20px rgba(254,204,2,.3); }
+.btn-secondary:hover{ transform:translateY(-2px); box-shadow:0 12px 26px rgba(249,165,26,.4); }
+
+/* ---------- Course category browser ---------- */
+.categories{ padding-block:60px 10px; background:var(--white); }
+.cat-grid{ display:grid; grid-template-columns:repeat(4, 1fr); gap:20px; }
+.cat-card{ background:var(--white); border:1px solid var(--border); border-radius:var(--radius); padding:24px 20px; text-align:center; box-shadow:var(--shadow-sm); cursor:pointer; transition:transform .3s ease, box-shadow .3s ease, border-color .3s ease; }
+.cat-card:hover, .cat-card.is-active{ transform:translateY(-6px); box-shadow:0 18px 32px rgba(2,1,1,.1); border-color:transparent; }
+.cat-card__icon{ width:52px; height:52px; border-radius:var(--radius-round); display:flex; align-items:center; justify-content:center; color:var(--white); font-size:1.15rem; margin:0 auto 14px; }
+.cat-card h4{ font-size:.92rem; font-weight:700; color:var(--heading); margin-bottom:6px; }
+.cat-card .duration{ font-size:.72rem; color:var(--primary-dark); font-weight:600; letter-spacing:.03em; }
+.cat-card.is-active{ outline:2px solid var(--gold); }
+
+/* ---------- Curriculum ---------- */
+.curriculum{ background:var(--light); padding-block:60px; margin-top:30px; }
+.course-block{ margin-bottom:56px; }
+.course-block:last-child{ margin-bottom:0; }
+.course-block__head{ display:flex; align-items:center; gap:16px; margin-bottom:26px; flex-wrap:wrap; }
+.course-block__icon{ width:56px; height:56px; border-radius:var(--radius-round); display:flex; align-items:center; justify-content:center; color:var(--white); font-size:1.3rem; flex-shrink:0; }
+.course-block__title{ font-size:1.25rem; font-weight:800; color:var(--heading); }
+.course-block__duration{ font-size:.72rem; font-weight:700; letter-spacing:.05em; text-transform:uppercase; background:var(--white); color:var(--primary-dark); border:1px solid var(--border); padding:5px 12px; border-radius:var(--radius-pill); margin-left:auto; }
+
+.section-head{ text-align:center; max-width:660px; margin:0 auto 44px; }
+.section-head .eyebrow2{ color:var(--primary); font-weight:700; letter-spacing:.12em; text-transform:uppercase; font-size:.72rem; margin-bottom:12px; }
+.section-head h2{ font-size:clamp(1.5rem,3vw,2rem); font-weight:800; color:var(--heading); position:relative; display:inline-block; padding-bottom:14px; margin-bottom:12px; }
+.section-head h2::after{ content:""; position:absolute; left:50%; bottom:0; transform:translateX(-50%); width:60px; height:4px; background:var(--gold); border-radius:var(--radius-pill); }
+.section-head p{ color:#666; font-size:.92rem; }
+
+.curriculum__grid{ display:grid; grid-template-columns:repeat(3, 1fr); gap:22px; }
+.course-card{ background:var(--white); border-radius:var(--radius); padding:26px 22px; border:1px solid var(--border); box-shadow:var(--shadow-sm); position:relative; overflow:hidden; isolation:isolate; transition:transform .35s ease, box-shadow .35s ease, border-color .35s ease; }
+.course-card::before{ content:""; position:absolute; top:0; left:0; right:0; height:4px; transform:scaleX(0); transform-origin:left; transition:transform .4s ease; }
+.course-card:hover{ transform:translateY(-8px); box-shadow:0 20px 38px rgba(2,1,1,.1); border-color:transparent; }
+.course-card:hover::before{ transform:scaleX(1); }
+.bar-red::before{ background:var(--gradient-primary); }
+.bar-gold::before{ background:var(--gradient-gold); }
+.bar-purple::before{ background:var(--gradient-purple); }
+
+.course-card__icon{ width:52px; height:52px; border-radius:var(--radius-round); display:flex; align-items:center; justify-content:center; color:var(--white); font-size:1.1rem; margin-bottom:14px; }
+.icon-red{ background:var(--gradient-primary); }
+.icon-gold{ background:var(--gradient-gold); color:var(--heading); }
+.icon-purple{ background:var(--gradient-purple); }
+
+.course-card h3{ font-size:1rem; font-weight:700; color:var(--heading); margin-bottom:8px; }
+.course-card p{ font-size:.84rem; color:#666; margin-bottom:12px; }
+.course-card ul{ display:flex; flex-direction:column; gap:6px; }
+.course-card ul li{ font-size:.79rem; color:#555; display:flex; align-items:flex-start; gap:8px; }
+.course-card ul li i{ color:var(--gold); font-size:.68rem; margin-top:4px; flex-shrink:0; }
+
+.mode-tag{ display:inline-flex; align-items:center; gap:6px; font-size:.68rem; font-weight:600; letter-spacing:.03em; background:var(--gray); color:var(--maroon); padding:4px 10px; border-radius:var(--radius-pill); margin-top:12px; }
+.mode-tag i{ color:var(--primary); font-size:.65rem; }
+
+/* ---------- Responsive ---------- */
+@media (max-width:1000px){
+  .cat-grid{ grid-template-columns:repeat(2,1fr); }
+}
+@media (max-width:900px){
+  .curriculum__grid{ grid-template-columns:repeat(2,1fr); }
+  .verify-hero{ padding-block:48px 100px; }
+  .search-wrap{ margin-top:-46px; }
+}
+@media (max-width:640px){
+  .verify-hero{ padding-block:40px 90px; }
+  .search-wrap{ margin-top:-40px; padding:0 16px; }
+  .search-card{ flex-direction:column; padding:18px; }
+  #searchBtn{ padding:13px; justify-content:center; }
+  .result-header{ flex-direction:column; align-items:flex-start; }
+  .meta{ text-align:left; }
+  .curriculum__grid{ grid-template-columns:1fr; }
+  .cat-grid{ grid-template-columns:1fr 1fr; }
+  .course-block__duration{ margin-left:0; }
+}
+@media (max-width:400px){
+  .verify-hero{ padding-block:36px 80px; }
+  .search-wrap{ margin-top:-34px; }
+  .cat-grid{ grid-template-columns:1fr; }
+}
+</style>
+</head>
+<body>
+
+    <header class="site-header" id="siteHeader">
+      <div class="top-bar">
+        <div class="container top-bar__inner">
+          <ul class="top-bar__contact">
+            <li><i class="fa-solid fa-phone"></i> +92 314 5226641</li>
+            <li><i class="fa-solid fa-envelope"></i>info@practicalbasedacademia.com</li>
+            <li>
+              <i class="fa-solid fa-location-dot"></i>  Main Campus, City Road,
+              Pakistan
+            </li>
+          </ul>
+          <div class="top-bar__right">
+            <ul class="top-bar__portals">
+              <li>
+                <a href="#"><i class="fa-solid fa-user"></i> Student Portal</a>
+              </li>
+              <li>
+                <a href="#"><i class="fa-solid fa-user"></i> Parent Portal</a>
+              </li>
+              <li>
+                <a href="#"><i class="fa-solid fa-user"></i> Staff Portal</a>
+              </li>
+              <li>
+                <a href="certificates.html"><i class="fa-solid fa-award"></i> Verify Certificate</a>
+              </li>
+            </ul>
+            <ul class="top-bar__social">
+              <li>
+                <a href="#" aria-label="Facebook"
+                  ><i class="fa-brands fa-facebook-f"></i
+                ></a>
+              </li>
+              <li>
+                <a href="#" aria-label="Twitter"
+                  ><i class="fa-brands fa-twitter"></i
+                ></a>
+              </li>
+              <li>
+                <a href="#" aria-label="Instagram"
+                  ><i class="fa-brands fa-instagram"></i
+                ></a>
+              </li>
+              <li>
+                <a href="#" aria-label="YouTube"
+                  ><i class="fa-brands fa-youtube"></i
+                ></a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <nav class="navbar" id="navbar">
+        <div class="container navbar__inner">
+          <a href="index.html" class="navbar__logo">
+            <img
+              src="images/logo-1.png"
+              alt="PBFL School System Logo"
+              class="navbar__logo-img"
+            />
+            <span class="navbar__logo-text">
+              <strong
+                ><span class="logo-letter logo-letter--dark">P</span
+                ><span class="logo-letter logo-letter--dark">B</span
+                ><span class="logo-letter logo-letter--red">F</span
+                ><span class="logo-letter logo-letter--gold">L</span></strong
+              >
+              <small>PRACTICAL BASED FAST LEARNING<br />SCHOOL SYSTEM</small>
+            </span>
+          </a>
+
+          <ul class="navbar__menu" id="navbarMenu">
+            <li><a href="index.html">HOME</a></li>
+            <li><a href="about.html">ABOUT US</a></li>
+                         <li><a href="index.html#academics">ACADEMICS</a></li>
+
+            <li class="has-dropdown">
+              <a href="index.html#admissions"
+                >ADMISSIONS <i class="fa-solid fa-chevron-down"></i
+              ></a>
+              <ul class="dropdown">
+                <li><a href="admission-form.html">Admission Form</a></li>
+                <li><a href="fee-structure.html">Fee Structure</a></li>
+                <li><a href="prospectus.html">Prospectus</a></li>
+              </ul>
+            </li>
+            <li class="has-dropdown">
+              <a href="index.html#departments"
+                >DEPARTMENTS <i class="fa-solid fa-chevron-down"></i
+              ></a>
+              <ul class="dropdown">
+                <li><a href="#">Science</a></li>
+                <li><a href="#">Computer</a></li>
+                <li><a href="#">Arts</a></li>
+              </ul>
+            </li>
+            <li><a href="index.html#facilities">FACILITIES</a></li>
+            <li><a href="index.html#gallery">GALLERY</a></li>
+            <li><a href="index.html#events">EVENTS</a></li>
+            <li><a href="index.html#contact">CONTACT</a></li>
+          </ul>
+
+          <a href="index.html#admissions" class="btn btn--primary navbar__cta"
+            >APPLY NOW</a
+          >
+
+          <button
+            class="navbar__toggle"
+            id="navbarToggle"
+            aria-label="Toggle navigation"
+          >
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+        </div>
+      </nav>
+    </header>
+
+<section class="verify-hero">
+  <div class="container verify-hero__inner">
+    <p class="eyebrow">PRACTICAL BASED ACADEMY</p>
+    <h1>Certificate Verification</h1>
+    <p>Enter your certificate serial number below to view, verify and download your certificate — covering every course we offer.</p>
+  </div>
+</section>
+
+<div class="search-wrap">
+  <div class="search-card">
+    <input type="text" id="serialInput" placeholder="e.g. PBA-COM-2026-001" autocomplete="off" spellcheck="false">
+    <button id="searchBtn"><i class="fa-solid fa-magnifying-glass"></i> Search</button>
+  </div>
+  <p class="hint">Your serial number was shared with you when your certificate was issued.</p>
+</div>
+
+<main class="verify-main">
+  <div class="state" id="stateIdle">
+    <span class="big"><i class="fa-solid fa-magnifying-glass"></i></span>
+    Type your serial number and press Search, or hit Enter.
+  </div>
+
+  <div class="state error" id="stateError">
+    <span class="big"><i class="fa-solid fa-circle-xmark"></i></span>
+    <span id="errorText">No certificate found for that serial number.</span><br>
+    Double-check the number and try again, or contact the academy if the problem continues.
+  </div>
+
+  <div class="result" id="result">
+    <div class="result-header">
+      <div class="badge-group">
+        <span class="badge"><i class="fa-solid fa-circle-check"></i> Verified Certificate</span>
+        <span class="badge badge-course" id="resCourse"></span>
+      </div>
+      <div class="meta">
+        <div class="name" id="resName"></div>
+        <div class="serial" id="resSerial"></div>
+      </div>
+    </div>
+    <div class="cert-frame">
+      <img id="resImg" src="" alt="Certificate">
+    </div>
+    <div class="actions">
+      <a href="#" id="downloadBtn" class="btn-primary" download><i class="fa-solid fa-download"></i> Download Certificate</a>
+      <a href="#" id="openBtn" class="btn-secondary" target="_blank" rel="noopener"><i class="fa-solid fa-up-right-from-square"></i> Open Full Size</a>
+    </div>
+  </div>
+</main>
+
+<!-- ===================== COURSE CATEGORY BROWSER ===================== -->
+<section class="categories" id="categories">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow2">Our Courses</p>
+      <h2>Browse by Course</h2>
+      <p>Every student certificate belongs to one of these 3-month practical courses. Tap a course to jump to its curriculum below.</p>
+    </div>
+    <div class="cat-grid">
+      <div class="cat-card" data-jump="curr-computer">
+        <div class="cat-card__icon icon-red"><i class="fa-solid fa-computer"></i></div>
+        <h4>Introduction to Computer</h4>
+        <span class="duration">3-Month Course</span>
+      </div>
+      <div class="cat-card" data-jump="curr-webdev">
+        <div class="cat-card__icon icon-gold"><i class="fa-solid fa-code"></i></div>
+        <h4>Introduction to Web Development</h4>
+        <span class="duration">3-Month Course</span>
+      </div>
+      <div class="cat-card" data-jump="curr-graphic">
+        <div class="cat-card__icon icon-purple"><i class="fa-solid fa-palette"></i></div>
+        <h4>Graphic Designing</h4>
+        <span class="duration">3-Month Course</span>
+      </div>
+      <div class="cat-card" data-jump="curr-uiux">
+        <div class="cat-card__icon icon-red"><i class="fa-solid fa-pen-ruler"></i></div>
+        <h4>UI/UX Designer</h4>
+        <span class="duration">3-Month Course</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CURRICULUM ===================== -->
+<section class="curriculum" id="curriculum">
+  <div class="container">
+
+    <!-- Introduction to Computer -->
+    <div class="course-block" id="curr-computer">
+      <div class="course-block__head">
+        <div class="course-block__icon icon-red"><i class="fa-solid fa-computer"></i></div>
+        <h3 class="course-block__title">Introduction to Computer</h3>
+        <span class="course-block__duration">3 Months</span>
+      </div>
+      <div class="curriculum__grid">
+
+        <div class="course-card bar-red">
+          <div class="course-card__icon icon-red"><i class="fa-solid fa-file-word"></i></div>
+          <h3>MS Office Suite</h3>
+          <p>Word, Excel and PowerPoint — both desktop and web versions.</p>
+          <ul>
+            <li><i class="fa-solid fa-check"></i> MS Word: formatting, tables, mail merge</li>
+            <li><i class="fa-solid fa-check"></i> MS Excel: formulas, sheets, basic charts</li>
+            <li><i class="fa-solid fa-check"></i> Online (Office 365) vs offline (desktop) use</li>
+          </ul>
+          <span class="mode-tag"><i class="fa-solid fa-circle-nodes"></i> Online + Offline</span>
+        </div>
+
+        <div class="course-card bar-gold">
+          <div class="course-card__icon icon-gold"><i class="fa-solid fa-clapperboard"></i></div>
+          <h3>Video Editing (CapCut)</h3>
+          <p>Editing short videos for school projects and social content.</p>
+          <ul>
+            <li><i class="fa-solid fa-check"></i> Trimming, transitions &amp; text overlays</li>
+            <li><i class="fa-solid fa-check"></i> Adding music and voiceovers</li>
+            <li><i class="fa-solid fa-check"></i> Exporting for mobile and desktop</li>
+          </ul>
+          <span class="mode-tag"><i class="fa-solid fa-mobile-screen"></i> Mobile + Desktop</span>
+        </div>
+
+        <div class="course-card bar-red">
+          <div class="course-card__icon icon-red"><i class="fa-solid fa-palette"></i></div>
+          <h3>Canva Design Tool</h3>
+          <p>Creating posters, certificates, presentations and social posts.</p>
+          <ul>
+            <li><i class="fa-solid fa-check"></i> Templates, layouts &amp; brand kits</li>
+            <li><i class="fa-solid fa-check"></i> Exporting designs (PNG, PDF)</li>
+            <li><i class="fa-solid fa-check"></i> Sharing and collaboration</li>
+          </ul>
+          <span class="mode-tag"><i class="fa-solid fa-cloud"></i> Web-based</span>
+        </div>
+
+        <div class="course-card bar-gold">
+          <div class="course-card__icon icon-gold"><i class="fa-solid fa-list-check"></i></div>
+          <h3>Google Forms</h3>
+          <p>Building forms, quizzes and surveys with automatic results.</p>
+          <ul>
+            <li><i class="fa-solid fa-check"></i> Creating question types &amp; sections</li>
+            <li><i class="fa-solid fa-check"></i> Collecting and viewing responses</li>
+            <li><i class="fa-solid fa-check"></i> Sharing forms via link</li>
+          </ul>
+          <span class="mode-tag"><i class="fa-solid fa-cloud"></i> Web-based</span>
+        </div>
+
+        <div class="course-card bar-red">
+          <div class="course-card__icon icon-red"><i class="fa-solid fa-desktop"></i></div>
+          <h3>Windows Operating System</h3>
+          <p>Everyday use, settings and file management on Windows.</p>
+          <ul>
+            <li><i class="fa-solid fa-check"></i> Creating files &amp; folders, organizing data</li>
+            <li><i class="fa-solid fa-check"></i> System settings &amp; control panel basics</li>
+            <li><i class="fa-solid fa-check"></i> Installing and managing applications</li>
+          </ul>
+          <span class="mode-tag"><i class="fa-solid fa-computer"></i> Desktop OS</span>
+        </div>
+
+        <div class="course-card bar-gold">
+          <div class="course-card__icon icon-gold"><i class="fa-solid fa-envelope"></i></div>
+          <h3>Email &amp; Communication</h3>
+          <p>Writing professional emails and everyday digital communication.</p>
+          <ul>
+            <li><i class="fa-solid fa-check"></i> Composing formal &amp; informal emails</li>
+            <li><i class="fa-solid fa-check"></i> Attachments, CC/BCC, etiquette</li>
+            <li><i class="fa-solid fa-check"></i> Gmail &amp; Outlook basics</li>
+          </ul>
+          <span class="mode-tag"><i class="fa-solid fa-cloud"></i> Web-based</span>
+        </div>
+
+        <div class="course-card bar-red">
+          <div class="course-card__icon icon-red"><i class="fa-solid fa-robot"></i></div>
+          <h3>AI Tools (ChatGPT &amp; more)</h3>
+          <p>Practical use of AI tools for study, writing and productivity.</p>
+          <ul>
+            <li><i class="fa-solid fa-check"></i> Writing effective prompts</li>
+            <li><i class="fa-solid fa-check"></i> Using AI for research &amp; assignments</li>
+            <li><i class="fa-solid fa-check"></i> Responsible and ethical use of AI</li>
+          </ul>
+          <span class="mode-tag"><i class="fa-solid fa-cloud"></i> Web-based</span>
+        </div>
+
+        <div class="course-card bar-gold">
+          <div class="course-card__icon icon-gold"><i class="fa-solid fa-laptop-code"></i></div>
+          <h3>Basic Computer Use</h3>
+          <p>Foundational skills every student needs before going further.</p>
+          <ul>
+            <li><i class="fa-solid fa-check"></i> Creating, renaming &amp; organizing files/folders</li>
+            <li><i class="fa-solid fa-check"></i> Copy, paste, shortcuts &amp; navigation</li>
+            <li><i class="fa-solid fa-check"></i> Basic troubleshooting</li>
+          </ul>
+          <span class="mode-tag"><i class="fa-solid fa-computer"></i> Desktop OS</span>
+        </div>
+
+        <div class="course-card bar-red">
+          <div class="course-card__icon icon-red"><i class="fa-solid fa-memory"></i></div>
+          <h3>Computer Hardware Basics</h3>
+          <p>Understanding the machine itself — not just the software.</p>
+          <ul>
+            <li><i class="fa-solid fa-check"></i> Checking hardware &amp; system specifications</li>
+            <li><i class="fa-solid fa-check"></i> SSD vs HDD, RAM &amp; processor basics</li>
+            <li><i class="fa-solid fa-check"></i> Identifying ports, devices &amp; peripherals</li>
+          </ul>
+          <span class="mode-tag"><i class="fa-solid fa-microchip"></i> Hands-on</span>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Introduction to Web Development -->
+    <div class="course-block" id="curr-webdev">
+      <div class="course-block__head">
+        <div class="course-block__icon icon-gold"><i class="fa-solid fa-code"></i></div>
+        <h3 class="course-block__title">Introduction to Web Development</h3>
+        <span class="course-block__duration">3 Months</span>
+      </div>
+      <div class="curriculum__grid">
+
+        <div class="course-card bar-gold">
+          <div class="course-card__icon icon-gold"><i class="fa-brands fa-html5"></i></div>
+          <h3>HTML Fundamentals</h3>
+          <p>Structuring web pages with semantic, accessible markup.</p>
+          <ul>
+            <li><i class="fa-solid fa-check"></i> Tags, elements &amp; document structure</li>
+            <li><i class="fa-solid fa-check"></i> Forms, links, images &amp; tables</li>
+            <li><i class="fa-solid fa-check"></i> Semantic HTML &amp; accessibility basics</li>
+          </ul>
+          <span class="mode-tag"><i class="fa-solid fa-code"></i> Hands-on Coding</span>
+        </div>
+
+        <div class="course-card bar-red">
+          <div class="course-card__icon icon-red"><i class="fa-brands fa-css3-alt"></i></div>
+          <h3>CSS Styling</h3>
+          <p>Designing and styling pages so they look professional.</p>
+          <ul>
+            <li><i class="fa-solid fa-check"></i> Selectors, box model &amp; typography</li>
+            <li><i class="fa-solid fa-check"></i> Flexbox &amp; Grid layouts</li>
+            <li><i class="fa-solid fa-check"></i> Colors, spacing &amp; visual hierarchy</li>
+          </ul>
+          <span class="mode-tag"><i class="fa-solid fa-code"></i> Hands-on Coding</span>
+        </div>
+
+        <div class="course-card bar-gold">
+          <div class="course-card__icon icon-gold"><i class="fa-solid fa-mobile-screen-button"></i></div>
+          <h3>Responsive Web Design</h3>
+          <p>Making websites that work on phones, tablets and desktops.</p>
+          <ul>
+            <li><i class="fa-solid fa-check"></i> Media queries &amp; breakpoints</li>
+            <li><i class="fa-solid fa-check"></i> Mobile-first design approach</li>
+            <li><i class="fa-solid fa-check"></i> Testing across screen sizes</li>
+          </ul>
+          <span class="mode-tag"><i class="fa-solid fa-computer"></i> Practical Projects</span>
+        </div>
+
+        <div class="course-card bar-red">
+          <div class="course-card__icon icon-red"><i class="fa-brands fa-js"></i></div>
+          <h3>JavaScript Basics</h3>
+          <p>Adding interactivity to static pages.</p>
+          <ul>
+            <li><i class="fa-solid fa-check"></i> Variables, functions &amp; events</li>
+            <li><i class="fa-solid fa-check"></i> DOM manipulation basics</li>
+            <li><i class="fa-solid fa-check"></i> Simple interactive components</li>
+          </ul>
+          <span class="mode-tag"><i class="fa-solid fa-code"></i> Hands-on Coding</span>
+        </div>
+
+        <div class="course-card bar-gold">
+          <div class="course-card__icon icon-gold"><i class="fa-solid fa-code-branch"></i></div>
+          <h3>Developer Tools &amp; Hosting</h3>
+          <p>The workflow around writing and publishing real websites.</p>
+          <ul>
+            <li><i class="fa-solid fa-check"></i> Code editors &amp; browser dev tools</li>
+            <li><i class="fa-solid fa-check"></i> Basic Git &amp; version control</li>
+            <li><i class="fa-solid fa-check"></i> Publishing a live website</li>
+          </ul>
+          <span class="mode-tag"><i class="fa-solid fa-cloud"></i> Online Deployment</span>
+        </div>
+
+        <div class="course-card bar-red">
+          <div class="course-card__icon icon-red"><i class="fa-solid fa-diagram-project"></i></div>
+          <h3>Final Project</h3>
+          <p>Building and launching a complete personal or business website.</p>
+          <ul>
+            <li><i class="fa-solid fa-check"></i> Planning a multi-page site</li>
+            <li><i class="fa-solid fa-check"></i> Combining HTML, CSS &amp; JS</li>
+            <li><i class="fa-solid fa-check"></i> Presenting the finished project</li>
+          </ul>
+          <span class="mode-tag"><i class="fa-solid fa-laptop-code"></i> Capstone Project</span>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Graphic Designing -->
+    <div class="course-block" id="curr-graphic">
+      <div class="course-block__head">
+        <div class="course-block__icon icon-purple"><i class="fa-solid fa-palette"></i></div>
+        <h3 class="course-block__title">Graphic Designing Course</h3>
+        <span class="course-block__duration">3 Months</span>
+      </div>
+      <div class="curriculum__grid">
+
+        <div class="course-card bar-purple">
+          <div class="course-card__icon icon-purple"><i class="fa-solid fa-swatchbook"></i></div>
+          <h3>Design Fundamentals</h3>
+          <p>The core principles behind every good design.</p>
+          <ul>
+            <li><i class="fa-solid fa-check"></i> Color theory &amp; palettes</li>
+            <li><i class="fa-solid fa-check"></i> Typography &amp; font pairing</li>
+            <li><i class="fa-solid fa-check"></i> Layout, balance &amp; visual hierarchy</li>
+          </ul>
+          <span class="mode-tag"><i class="fa-solid fa-lightbulb"></i> Design Theory</span>
+        </div>
+
+        <div class="course-card bar-red">
+          <div class="course-card__icon icon-red"><i class="fa-solid fa-object-group"></i></div>
+          <h3>Adobe Photoshop</h3>
+          <p>Photo editing and raster-based design work.</p>
+          <ul>
+            <li><i class="fa-solid fa-check"></i> Layers, masks &amp; selections</li>
+            <li><i class="fa-solid fa-check"></i> Photo retouching &amp; compositing</li>
+            <li><i class="fa-solid fa-check"></i> Exporting for print &amp; web</li>
+          </ul>
+          <span class="mode-tag"><i class="fa-solid fa-desktop"></i> Desktop Software</span>
+        </div>
+
+        <div class="course-card bar-purple">
+          <div class="course-card__icon icon-purple"><i class="fa-solid fa-bezier-curve"></i></div>
+          <h3>Adobe Illustrator</h3>
+          <p>Vector graphics for logos, icons and scalable artwork.</p>
+          <ul>
+            <li><i class="fa-solid fa-check"></i> Pen tool &amp; vector shapes</li>
+            <li><i class="fa-solid fa-check"></i> Logo &amp; icon design basics</li>
+            <li><i class="fa-solid fa-check"></i> Working with scalable artwork</li>
+          </ul>
+          <span class="mode-tag"><i class="fa-solid fa-desktop"></i> Desktop Software</span>
+        </div>
+
+        <div class="course-card bar-red">
+          <div class="course-card__icon icon-red"><i class="fa-solid fa-images"></i></div>
+          <h3>Canva (Advanced)</h3>
+          <p>Fast, professional design work for everyday needs.</p>
+          <ul>
+            <li><i class="fa-solid fa-check"></i> Advanced templates &amp; brand kits</li>
+            <li><i class="fa-solid fa-check"></i> Social media &amp; marketing designs</li>
+            <li><i class="fa-solid fa-check"></i> Team collaboration &amp; sharing</li>
+          </ul>
+          <span class="mode-tag"><i class="fa-solid fa-cloud"></i> Web-based</span>
+        </div>
+
+        <div class="course-card bar-purple">
+          <div class="course-card__icon icon-purple"><i class="fa-solid fa-copyright"></i></div>
+          <h3>Branding &amp; Identity</h3>
+          <p>Designing a complete visual identity for a brand.</p>
+          <ul>
+            <li><i class="fa-solid fa-check"></i> Logo systems &amp; brand guidelines</li>
+            <li><i class="fa-solid fa-check"></i> Business cards &amp; stationery</li>
+            <li><i class="fa-solid fa-check"></i> Consistent visual language</li>
+          </ul>
+          <span class="mode-tag"><i class="fa-solid fa-briefcase"></i> Client-style Projects</span>
+        </div>
+
+        <div class="course-card bar-red">
+          <div class="course-card__icon icon-red"><i class="fa-solid fa-print"></i></div>
+          <h3>Print &amp; Digital Design</h3>
+          <p>Preparing designs correctly for their final medium.</p>
+          <ul>
+            <li><i class="fa-solid fa-check"></i> Print-ready files &amp; resolution</li>
+            <li><i class="fa-solid fa-check"></i> Digital ad &amp; banner formats</li>
+            <li><i class="fa-solid fa-check"></i> Building a personal portfolio</li>
+          </ul>
+          <span class="mode-tag"><i class="fa-solid fa-file-export"></i> Portfolio Ready</span>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- UI/UX Designer -->
+    <div class="course-block" id="curr-uiux">
+      <div class="course-block__head">
+        <div class="course-block__icon icon-red"><i class="fa-solid fa-pen-ruler"></i></div>
+        <h3 class="course-block__title">UI/UX Designer Course</h3>
+        <span class="course-block__duration">3 Months</span>
+      </div>
+      <div class="curriculum__grid">
+
+        <div class="course-card bar-red">
+          <div class="course-card__icon icon-red"><i class="fa-solid fa-brain"></i></div>
+          <h3>Design Thinking</h3>
+          <p>The problem-solving process behind great products.</p>
+          <ul>
+            <li><i class="fa-solid fa-check"></i> Empathize, define, ideate, prototype, test</li>
+            <li><i class="fa-solid fa-check"></i> Identifying real user problems</li>
+            <li><i class="fa-solid fa-check"></i> Working from brief to solution</li>
+          </ul>
+          <span class="mode-tag"><i class="fa-solid fa-lightbulb"></i> Design Theory</span>
+        </div>
+
+        <div class="course-card bar-gold">
+          <div class="course-card__icon icon-gold"><i class="fa-solid fa-users"></i></div>
+          <h3>User Research</h3>
+          <p>Understanding real users before designing for them.</p>
+          <ul>
+            <li><i class="fa-solid fa-check"></i> User interviews &amp; surveys</li>
+            <li><i class="fa-solid fa-check"></i> Personas &amp; user journeys</li>
+            <li><i class="fa-solid fa-check"></i> Competitive analysis basics</li>
+          </ul>
+          <span class="mode-tag"><i class="fa-solid fa-magnifying-glass"></i> Research Methods</span>
+        </div>
+
+        <div class="course-card bar-red">
+          <div class="course-card__icon icon-red"><i class="fa-solid fa-layer-group"></i></div>
+          <h3>Wireframing &amp; Prototyping</h3>
+          <p>Turning ideas into clickable, testable designs in Figma.</p>
+          <ul>
+            <li><i class="fa-solid fa-check"></i> Low-fidelity wireframes</li>
+            <li><i class="fa-solid fa-check"></i> Interactive prototypes in Figma</li>
+            <li><i class="fa-solid fa-check"></i> Components &amp; design systems</li>
+          </ul>
+          <span class="mode-tag"><i class="fa-solid fa-cloud"></i> Figma (Web-based)</span>
+        </div>
+
+        <div class="course-card bar-gold">
+          <div class="course-card__icon icon-gold"><i class="fa-solid fa-swatchbook"></i></div>
+          <h3>UI Design Principles</h3>
+          <p>Designing interfaces that look good and work well.</p>
+          <ul>
+            <li><i class="fa-solid fa-check"></i> Grids, spacing &amp; alignment</li>
+            <li><i class="fa-solid fa-check"></i> Color, typography &amp; iconography</li>
+            <li><i class="fa-solid fa-check"></i> Buttons, forms &amp; UI components</li>
+          </ul>
+          <span class="mode-tag"><i class="fa-solid fa-lightbulb"></i> Design Theory</span>
+        </div>
+
+        <div class="course-card bar-red">
+          <div class="course-card__icon icon-red"><i class="fa-solid fa-vial"></i></div>
+          <h3>Usability Testing</h3>
+          <p>Checking that real users can actually use the design.</p>
+          <ul>
+            <li><i class="fa-solid fa-check"></i> Running simple usability tests</li>
+            <li><i class="fa-solid fa-check"></i> Collecting &amp; applying feedback</li>
+            <li><i class="fa-solid fa-check"></i> Iterating on designs</li>
+          </ul>
+          <span class="mode-tag"><i class="fa-solid fa-vial-circle-check"></i> Practical Testing</span>
+        </div>
+
+        <div class="course-card bar-gold">
+          <div class="course-card__icon icon-gold"><i class="fa-solid fa-briefcase"></i></div>
+          <h3>Portfolio Building</h3>
+          <p>Presenting completed work like a professional designer.</p>
+          <ul>
+            <li><i class="fa-solid fa-check"></i> Case study writing</li>
+            <li><i class="fa-solid fa-check"></i> Building a design portfolio</li>
+            <li><i class="fa-solid fa-check"></i> Presenting design decisions</li>
+          </ul>
+          <span class="mode-tag"><i class="fa-solid fa-file-export"></i> Portfolio Ready</span>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</section>
+
+    <!-- Footer -->
+    <footer class="site-footer" id="contact">
+      <div class="container site-footer__grid">
+        <div class="footer-col footer-col--about">
+          <a href="index.html" class="footer-logo">
+            <img src="images/logo-1.png" alt="PBFL School System Logo" />
+            <span>
+              <strong
+                ><span class="logo-letter logo-letter--light">P</span
+                ><span class="logo-letter logo-letter--light">B</span
+                ><span class="logo-letter logo-letter--red">F</span
+                ><span class="logo-letter logo-letter--gold">L</span></strong
+              >
+              <small>SCHOOL SYSTEM</small>
+            </span>
+          </a>
+          <p>
+            PBFL School System is committed to providing practical based quality
+            education with modern facilities and experienced faculty for a
+            brighter future.
+          </p>
+          <ul class="footer-social">
+            <li>
+              <a href="#" aria-label="Facebook"
+                ><i class="fa-brands fa-facebook-f"></i
+              ></a>
+            </li>
+            <li>
+              <a href="#" aria-label="Twitter"
+                ><i class="fa-brands fa-twitter"></i
+              ></a>
+            </li>
+            <li>
+              <a href="#" aria-label="Instagram"
+                ><i class="fa-brands fa-instagram"></i
+              ></a>
+            </li>
+            <li>
+              <a href="#" aria-label="YouTube"
+                ><i class="fa-brands fa-youtube"></i
+              ></a>
+            </li>
+            <li>
+              <a href="#" aria-label="LinkedIn"
+                ><i class="fa-brands fa-linkedin-in"></i
+              ></a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>QUICK LINKS</h4>
+          <ul>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="index.html#academics">Academics</a></li>
+            <li><a href="index.html#admissions">Admissions</a></li>
+            <li><a href="index.html#departments">Departments</a></li>
+            <li><a href="index.html#facilities">Facilities</a></li>
+            <li><a href="index.html#contact">Contact Us</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>ACADEMICS</h4>
+          <ul>
+            <li><a href="#">Primary School</a></li>
+            <li><a href="#">Middle School</a></li>
+            <li><a href="#">High School</a></li>
+            <li><a href="#">College / Intermediate</a></li>
+            <li><a href="#">Professional Courses</a></li>
+            <li><a href="#">Academic Calendar</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>RESOURCES</h4>
+          <ul>
+            <li><a href="prospectus.html">Download Prospectus</a></li>
+            <li><a href="fee-structure.html">Fee Structure</a></li>
+            <li><a href="admission-form.html">Admission Form</a></li>
+            <li><a href="#">Syllabus</a></li>
+            <li><a href="#">Student Portal</a></li>
+            <li><a href="#">Results</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>CONTACT US</h4>
+          <ul class="footer-contact">
+            <li>
+              <i class="fa-solid fa-location-dot"></i> Main Campus, City Road,
+              Pakistan
+            </li>
+            <li><i class="fa-solid fa-phone"></i> +92 300 1234567</li>
+            <li><i class="fa-solid fa-envelope"></i> info@pbfl.edu.pk</li>
+            <li>
+              <i class="fa-solid fa-clock"></i> Mon - Sat: 8:00 AM - 4:00 PM
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="site-footer__bottom">
+        <div class="container site-footer__bottom-inner">
+          <p>&copy; 2026 PBFL School System. All Rights Reserved.</p>
+          <ul>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms &amp; Conditions</a></li>
+            <li><a href="#">Sitemap</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+
+    <button id="backToTop" class="back-to-top" aria-label="Back to top">
+      <i class="fa-solid fa-arrow-up"></i>
+    </button>
+
+<script>
+  // ---- Certificate records ------------------------------------------------
+  // Add a new certificate by adding one line here: serial, name, course, file.
+  // "course" must exactly match one of the keys in COURSES below.
+  const COURSES = {
+    "computer": "Introduction to Computer",
+    "webdev":   "Introduction to Web Development",
+    "graphic":  "Graphic Designing",
+    "uiux":     "UI/UX Designer"
+  };
+
+  const CERTIFICATES = [
+    { serial: "PBA-COM-2026-001", name: "Ahmad Bassam",     course: "computer", file: "images/Ahmad_Bassam.png" },
+    { serial: "PBA-COM-2026-002", name: "Mehr-un-Nisa",     course: "computer", file: "images/Mehr-un-nissa.png" },
+    { serial: "PBA-COM-2026-003", name: "Minahil Rajpoot",  course: "computer", file: "images/Minahil_Rajpoot.png" },
+    { serial: "PBA-COM-2026-004", name: "Muhammad Azzam",   course: "computer", file: "images/Muhammad_Azzam.png" }
+
+    // Example rows for other courses — add these once you share the
+    // certificate images and student names for each course:
+    // { serial: "PBA-WD-2026-001",  name: "Student Name", course: "webdev",  file: "images/StudentName.png" },
+    // { serial: "PBA-GD-2026-001",  name: "Student Name", course: "graphic", file: "images/StudentName.png" },
+    // { serial: "PBA-UX-2026-001",  name: "Student Name", course: "uiux",    file: "images/StudentName.png" },
+  ];
+  // --------------------------------------------------------------------------
+
+  const input = document.getElementById('serialInput');
+  const btn = document.getElementById('searchBtn');
+  const stateIdle = document.getElementById('stateIdle');
+  const stateError = document.getElementById('stateError');
+  const errorText = document.getElementById('errorText');
+  const result = document.getElementById('result');
+  const resName = document.getElementById('resName');
+  const resSerial = document.getElementById('resSerial');
+  const resCourse = document.getElementById('resCourse');
+  const resImg = document.getElementById('resImg');
+  const downloadBtn = document.getElementById('downloadBtn');
+  const openBtn = document.getElementById('openBtn');
+
+  function showState(which){
+    stateIdle.classList.remove('show');
+    stateError.classList.remove('show');
+    result.classList.remove('show');
+    if(which) which.classList.add('show');
+  }
+
+  function search(){
+    const raw = input.value.trim();
+    if(!raw){
+      errorText.textContent = "Please enter a serial number.";
+      showState(stateError);
+      return;
+    }
+    const query = raw.toUpperCase();
+    const match = CERTIFICATES.find(c => c.serial.toUpperCase() === query);
+
+    if(!match){
+      errorText.textContent = "No certificate found for \"" + raw + "\".";
+      showState(stateError);
+      return;
+    }
+
+    resName.textContent = match.name;
+    resSerial.textContent = match.serial;
+    resCourse.innerHTML = '<i class="fa-solid fa-graduation-cap"></i> ' + (COURSES[match.course] || match.course);
+    resImg.src = match.file;
+    resImg.alt = "Certificate for " + match.name;
+    downloadBtn.href = match.file;
+    downloadBtn.setAttribute('download', match.name.replace(/\s+/g,'_') + '_Certificate.png');
+    openBtn.href = match.file;
+
+    showState(result);
+  }
+
+  btn.addEventListener('click', search);
+  input.addEventListener('keydown', e => { if(e.key === 'Enter') search(); });
+
+  // Category cards jump to their curriculum block
+  document.querySelectorAll('.cat-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const target = document.getElementById(card.dataset.jump);
+      if(target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+
+  showState(stateIdle);
+</script>
+    <script src="script.js"></script>
+</body>
+</html>

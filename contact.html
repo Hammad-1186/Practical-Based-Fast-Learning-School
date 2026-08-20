@@ -1,0 +1,921 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact Us | PBFL School System</title>
+<meta name="description" content="Get in touch with PBFL Practical Based Fast Learning School System — office locations, phone numbers, email, and a quick contact form.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="style.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+/* ===================== CONTACT PAGE — component styles only ===================== */
+:root{
+  --cream:#FBF2DF;
+  --check-color:#1FA855;
+}
+
+/* ---------- Page title banner (animated floating icons) ---------- */
+.page-banner{
+  position:relative;
+  background:var(--gradient-primary);
+  color:var(--white);
+  padding-block:78px;
+  text-align:center;
+  overflow:hidden;
+}
+.page-banner::before{
+  content:"";
+  position:absolute; inset:0;
+  background:
+    radial-gradient(circle at 8% 20%, rgba(254,204,2,.18), transparent 42%),
+    radial-gradient(circle at 92% 80%, rgba(249,165,26,.16), transparent 46%);
+}
+.page-banner__inner{ position:relative; z-index:2; }
+.page-banner h1{
+  color:var(--white);
+  font-size:clamp(2rem, 4.5vw, 2.8rem);
+  font-weight:800;
+  letter-spacing:-.01em;
+  margin-bottom:10px;
+}
+.page-banner .crumb{
+  font-size:.82rem;
+  color:rgba(255,255,255,.8);
+  letter-spacing:.04em;
+}
+.page-banner .crumb span{ color:var(--secondary); font-weight:600; }
+
+.banner-float{
+  position:absolute;
+  color:rgba(255,255,255,.16);
+  z-index:1;
+  animation:floaty 6s ease-in-out infinite;
+}
+.banner-float--1{ top:18%; left:8%;  font-size:2.4rem; animation-delay:0s; }
+.banner-float--2{ top:62%; left:16%; font-size:1.6rem; animation-delay:1.2s; }
+.banner-float--3{ top:24%; right:10%; font-size:2rem;  animation-delay:.6s; }
+.banner-float--4{ top:66%; right:18%; font-size:1.8rem; animation-delay:1.8s; }
+@keyframes floaty{
+  0%, 100%{ transform:translateY(0) rotate(0deg); }
+  50%{ transform:translateY(-16px) rotate(6deg); }
+}
+@media (prefers-reduced-motion: reduce){
+  .banner-float{ animation:none; }
+}
+
+/* ---------- Quick contact info cards ---------- */
+.quick-contact{
+  padding-block:0;
+  background:var(--white);
+}
+.quick-contact__wrap{
+  margin-top:0;
+  padding-top:var(--section-padding-sm);
+  position:relative;
+  z-index:3;
+}
+.quick-contact__grid{
+  display:grid;
+  grid-template-columns:repeat(4, 1fr);
+  gap:22px;
+}
+.qc-card{
+  background:var(--white);
+  border-radius:var(--radius);
+  border:1px solid var(--border);
+  box-shadow:var(--shadow-lg);
+  padding:28px 22px;
+  text-align:center;
+  transition:transform var(--transition), box-shadow var(--transition);
+}
+.qc-card:hover{
+  transform:translateY(-8px);
+  box-shadow:0 26px 50px rgba(2,1,1,.16);
+}
+.qc-card__icon{
+  width:58px; height:58px;
+  border-radius:var(--radius-round);
+  display:flex; align-items:center; justify-content:center;
+  color:var(--white);
+  font-size:1.25rem;
+  margin:0 auto 16px;
+  transition:transform var(--transition-fast);
+}
+.qc-card:hover .qc-card__icon{ transform:scale(1.1) rotate(-6deg); }
+.qc-card__icon--red{ background:var(--gradient-primary); }
+.qc-card__icon--gold{ background:var(--gradient-gold); color:var(--heading); }
+.qc-card h3{
+  font-size:1rem;
+  margin-bottom:8px;
+}
+.qc-card p{
+  font-size:.86rem;
+  color:#666;
+  margin-bottom:2px;
+}
+.qc-card a{ color:#666; }
+.qc-card a:hover{ color:var(--primary); }
+
+/* ---------- Main contact grid: form + info/map ---------- */
+.contact-main{
+  padding-block:calc(var(--section-padding) + 30px) var(--section-padding);
+  background:var(--white);
+}
+.contact-main__grid{
+  display:grid;
+  grid-template-columns:1.15fr .85fr;
+  gap:48px;
+  align-items:start;
+}
+
+/* Form */
+.contact-form{
+  background:var(--white);
+  border:1px solid var(--border);
+  border-radius:var(--radius-lg);
+  box-shadow:var(--shadow);
+  padding:40px;
+}
+.contact-form h2{
+  font-size:var(--fs-h3);
+  margin-bottom:8px;
+}
+.contact-form > p{
+  color:#666;
+  font-size:var(--fs-sm);
+  margin-bottom:28px;
+}
+.form-row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:18px;
+  margin-bottom:18px;
+}
+.form-group{ margin-bottom:18px; }
+.form-group label{
+  display:block;
+  font-size:var(--fs-xs);
+  font-weight:600;
+  color:var(--heading);
+  margin-bottom:8px;
+  letter-spacing:.02em;
+}
+.form-group input,
+.form-group select,
+.form-group textarea{
+  width:100%;
+  border:1px solid var(--border);
+  border-radius:var(--radius-sm);
+  padding:13px 15px;
+  font-family:var(--font-base);
+  font-size:.92rem;
+  color:var(--text);
+  background:var(--light);
+  transition:border-color var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast);
+}
+.form-group textarea{ resize:vertical; min-height:130px; }
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus{
+  outline:none;
+  border-color:var(--gold);
+  background:var(--white);
+  box-shadow:0 0 0 3px rgba(249,165,26,.16);
+}
+.form-group.has-error input,
+.form-group.has-error select,
+.form-group.has-error textarea{
+  border-color:var(--primary);
+  box-shadow:0 0 0 3px rgba(220,41,25,.12);
+}
+.field-error{
+  display:none;
+  font-size:.74rem;
+  color:var(--primary);
+  margin-top:6px;
+}
+.form-group.has-error .field-error{ display:block; }
+
+.contact-form .btn{ width:100%; }
+.contact-form .btn i{ margin-left:2px; }
+
+.form-success{
+  display:none;
+  align-items:center;
+  gap:14px;
+  background:rgba(31,168,85,.08);
+  border:1px solid rgba(31,168,85,.35);
+  color:#146a38;
+  border-radius:var(--radius-sm);
+  padding:16px 18px;
+  margin-bottom:20px;
+  font-size:.9rem;
+  animation:fadeIn .35s ease both;
+}
+.form-success.show{ display:flex; }
+.form-success i{ font-size:1.3rem; color:var(--check-color); flex-shrink:0; }
+@keyframes fadeIn{
+  from{ opacity:0; transform:translateY(-6px); }
+  to{ opacity:1; transform:translateY(0); }
+}
+
+/* Info / map column */
+.contact-info{
+  display:flex;
+  flex-direction:column;
+  gap:22px;
+}
+.info-card{
+  background:var(--light);
+  border-radius:var(--radius);
+  border:1px solid var(--border);
+  padding:26px;
+}
+.info-card__head{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-bottom:16px;
+}
+.info-card__icon{
+  width:42px; height:42px;
+  border-radius:var(--radius-round);
+  background:var(--gradient-primary);
+  color:var(--white);
+  display:flex; align-items:center; justify-content:center;
+  font-size:1rem;
+  flex-shrink:0;
+}
+.info-card h3{ font-size:.98rem; }
+.info-card__row{
+  display:flex;
+  justify-content:space-between;
+  align-items:baseline;
+  padding-block:8px;
+  border-bottom:1px dashed var(--border);
+  font-size:.86rem;
+}
+.info-card__row:last-child{ border-bottom:none; }
+.info-card__row span:first-child{ color:#777; }
+.info-card__row span:last-child{ color:var(--heading); font-weight:600; text-align:right; }
+
+.map-frame{
+  border-radius:var(--radius);
+  overflow:hidden;
+  border:1px solid var(--border);
+  box-shadow:var(--shadow-sm);
+  height:230px;
+}
+.map-frame iframe{ width:100%; height:100%; border:0; display:block; }
+
+.social-row{
+  display:flex;
+  gap:10px;
+}
+.social-row a{
+  width:42px; height:42px;
+  border-radius:var(--radius-round);
+  background:var(--gradient-gold);
+  color:var(--heading);
+  display:flex; align-items:center; justify-content:center;
+  transition:transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+.social-row a:hover{
+  transform:translateY(-4px);
+  box-shadow:0 10px 22px rgba(249,165,26,.4);
+}
+
+/* ---------- Department contact cards ---------- */
+.departments-contact{
+  background:var(--light);
+  padding-block:var(--section-padding);
+}
+.dept-grid{
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  gap:26px;
+}
+.dept-card{
+  background:var(--white);
+  border-radius:var(--radius);
+  border:1px solid var(--border);
+  box-shadow:var(--shadow-sm);
+  padding:30px 26px;
+  position:relative;
+  overflow:hidden;
+  isolation:isolate;
+  transition:transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+}
+.dept-card::before{
+  content:"";
+  position:absolute; top:0; left:0; right:0; height:4px;
+  transform:scaleX(0); transform-origin:left;
+  transition:transform .4s ease;
+}
+.dept-card:hover{ transform:translateY(-8px); box-shadow:var(--shadow-lg); border-color:transparent; }
+.dept-card:hover::before{ transform:scaleX(1); }
+.dept-card--red::before{ background:var(--gradient-primary); }
+.dept-card--gold::before{ background:var(--gradient-gold); }
+.dept-card--purple::before{ background:linear-gradient(135deg, var(--purple) 0%, #3d2154 100%); }
+
+.dept-card__icon{
+  width:52px; height:52px;
+  border-radius:var(--radius-round);
+  display:flex; align-items:center; justify-content:center;
+  color:var(--white);
+  font-size:1.1rem;
+  margin-bottom:16px;
+}
+.dept-icon-red{ background:var(--gradient-primary); }
+.dept-icon-gold{ background:var(--gradient-gold); color:var(--heading); }
+.dept-icon-purple{ background:linear-gradient(135deg, var(--purple) 0%, #3d2154 100%); }
+
+.dept-card h3{ font-size:1.02rem; margin-bottom:6px; }
+.dept-card p.dept-desc{ font-size:.84rem; color:#666; margin-bottom:16px; }
+.dept-card__contact{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  font-size:.84rem;
+  color:var(--heading);
+}
+.dept-card__contact a{ color:inherit; }
+.dept-card__contact a:hover{ color:var(--primary); }
+.dept-card__contact i{ width:16px; color:var(--gold); margin-right:6px; }
+
+/* ---------- FAQ-style hours strip ---------- */
+.hours-strip{
+  background:var(--white);
+  padding-block:var(--section-padding-sm);
+  text-align:center;
+}
+.hours-strip__eyebrow{
+  display:inline-flex;
+  align-items:center;
+  gap:14px;
+  color:var(--maroon);
+  font-weight:700;
+  letter-spacing:var(--ls-wider);
+  font-size:var(--fs-xs);
+  margin-bottom:16px;
+}
+.hours-strip__eyebrow::before,
+.hours-strip__eyebrow::after{
+  content:"";
+  width:36px; height:1px;
+  background:var(--border);
+}
+.hours-strip h2{ font-size:var(--fs-h2); margin-bottom:26px; }
+.hours-grid{
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  gap:20px;
+  max-width:760px;
+  margin-inline:auto;
+}
+.hours-item{
+  background:var(--light);
+  border-radius:var(--radius);
+  padding:20px;
+}
+.hours-item strong{ display:block; color:var(--heading); margin-bottom:6px; font-size:.92rem; }
+.hours-item span{ color:#666; font-size:.84rem; }
+
+/* ---------- Responsive ---------- */
+@media (max-width:1000px){
+  .quick-contact__grid{ grid-template-columns:repeat(2,1fr); }
+  .contact-main__grid{ grid-template-columns:1fr; }
+  .dept-grid{ grid-template-columns:1fr; }
+  .hours-grid{ grid-template-columns:1fr; }
+}
+@media (max-width:640px){
+  .quick-contact__grid{ grid-template-columns:1fr; }
+  .contact-form{ padding:26px; }
+  .form-row{ grid-template-columns:1fr; gap:0; }
+  .banner-float{ display:none; }
+}
+</style>
+</head>
+<body>
+
+    <header class="site-header" id="siteHeader">
+      <div class="top-bar">
+        <div class="container top-bar__inner">
+          <ul class="top-bar__contact">
+            <li><i class="fa-solid fa-phone"></i> +92 300 1234567</li>
+            <li><i class="fa-solid fa-envelope"></i> info@pbfl.edu.pk</li>
+            <li>
+              <i class="fa-solid fa-location-dot"></i> Main Campus, City Road,
+              Pakistan
+            </li>
+          </ul>
+          <div class="top-bar__right">
+            <ul class="top-bar__portals">
+              <li>
+                <a href="#"><i class="fa-solid fa-user"></i> Student Portal</a>
+              </li>
+              <li>
+                <a href="#"><i class="fa-solid fa-user"></i> Parent Portal</a>
+              </li>
+              <li>
+                <a href="#"><i class="fa-solid fa-user"></i> Staff Portal</a>
+              </li>
+              <li>
+                <a href="certificates.html"><i class="fa-solid fa-award"></i> Verify Certificate</a>
+              </li>
+            </ul>
+            <ul class="top-bar__social">
+              <li>
+                <a href="#" aria-label="Facebook"
+                  ><i class="fa-brands fa-facebook-f"></i
+                ></a>
+              </li>
+              <li>
+                <a href="#" aria-label="Twitter"
+                  ><i class="fa-brands fa-twitter"></i
+                ></a>
+              </li>
+              <li>
+                <a href="#" aria-label="Instagram"
+                  ><i class="fa-brands fa-instagram"></i
+                ></a>
+              </li>
+              <li>
+                <a href="#" aria-label="YouTube"
+                  ><i class="fa-brands fa-youtube"></i
+                ></a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <nav class="navbar" id="navbar">
+        <div class="container navbar__inner">
+          <a href="index.html" class="navbar__logo">
+            <img
+              src="images/logo-1.png"
+              alt="PBFL School System Logo"
+              class="navbar__logo-img"
+            />
+            <span class="navbar__logo-text">
+              <strong
+                ><span class="logo-letter logo-letter--dark">P</span
+                ><span class="logo-letter logo-letter--dark">B</span
+                ><span class="logo-letter logo-letter--red">F</span
+                ><span class="logo-letter logo-letter--gold">L</span></strong
+              >
+              <small>PRACTICAL BASED FAST LEARNING<br />SCHOOL SYSTEM</small>
+            </span>
+          </a>
+
+          <ul class="navbar__menu" id="navbarMenu">
+            <li><a href="index.html">HOME</a></li>
+            <li><a href="about.html">ABOUT US</a></li>
+                        <li><a href="index.html#academics">ACADEMICS</a></li>
+
+            <li class="has-dropdown">
+              <a href="index.html#admissions"
+                >ADMISSIONS <i class="fa-solid fa-chevron-down"></i
+              ></a>
+              <ul class="dropdown">
+                <li><a href="admission-form.html">Admission Form</a></li>
+                <li><a href="fee-structure.html">Fee Structure</a></li>
+                <li><a href="prospectus.html">Prospectus</a></li>
+              </ul>
+            </li>
+            <li class="has-dropdown">
+              <a href="index.html#departments"
+                >DEPARTMENTS <i class="fa-solid fa-chevron-down"></i
+              ></a>
+              <ul class="dropdown">
+                <li><a href="#">Science</a></li>
+                <li><a href="#">Computer</a></li>
+                <li><a href="#">Arts</a></li>
+              </ul>
+            </li>
+            <li><a href="index.html#facilities">FACILITIES</a></li>
+            <li><a href="index.html#gallery">GALLERY</a></li>
+            <li><a href="index.html#events">EVENTS</a></li>
+            <li><a href="contact.html" class="active">CONTACT</a></li>
+          </ul>
+
+          <a href="index.html#admissions" class="btn btn--primary navbar__cta"
+            >APPLY NOW</a
+          >
+
+          <button
+            class="navbar__toggle"
+            id="navbarToggle"
+            aria-label="Toggle navigation"
+          >
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+        </div>
+      </nav>
+    </header>
+
+    <main>
+
+      <!-- ===================== PAGE TITLE BANNER ===================== -->
+      <section class="page-banner">
+        <i class="fa-solid fa-envelope banner-float banner-float--1"></i>
+        <i class="fa-solid fa-phone banner-float banner-float--2"></i>
+        <i class="fa-solid fa-location-dot banner-float banner-float--3"></i>
+        <i class="fa-solid fa-comments banner-float banner-float--4"></i>
+        <div class="container page-banner__inner">
+          <h1>Contact Us</h1>
+          <p class="crumb">Home &nbsp;/&nbsp; <span>Contact</span></p>
+        </div>
+      </section>
+
+      <!-- ===================== QUICK CONTACT CARDS ===================== -->
+      <section class="quick-contact">
+        <div class="container quick-contact__wrap">
+          <div class="quick-contact__grid">
+
+            <div class="qc-card" data-reveal>
+              <div class="qc-card__icon qc-card__icon--red"><i class="fa-solid fa-phone"></i></div>
+              <h3>Call Us</h3>
+              <p><a href="tel:+923001234567">+92 300 1234567</a></p>
+              <p><a href="tel:+923145226641">0314-5226641</a></p>
+            </div>
+
+            <div class="qc-card" data-reveal>
+              <div class="qc-card__icon qc-card__icon--gold"><i class="fa-solid fa-envelope"></i></div>
+              <h3>Email Us</h3>
+              <p><a href="mailto:info@pbfl.edu.pk">info@pbfl.edu.pk</a></p>
+              <p><a href="mailto:info@practicalbasedacademia.com">info@practicalbasedacademia.com</a></p>
+            </div>
+
+            <div class="qc-card" data-reveal>
+              <div class="qc-card__icon qc-card__icon--red"><i class="fa-solid fa-location-dot"></i></div>
+              <h3>Visit Us</h3>
+              <p>Lane No. 1, Razzaq Town,</p>
+              <p>near Allied School, New Chakra, Rawalpindi</p>
+            </div>
+
+            <div class="qc-card" data-reveal>
+              <div class="qc-card__icon qc-card__icon--gold"><i class="fa-solid fa-clock"></i></div>
+              <h3>Office Hours</h3>
+              <p>Mon &ndash; Sat</p>
+              <p>8:00 a.m. &ndash; 8:00 p.m.</p>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== FORM + INFO / MAP ===================== -->
+      <section class="contact-main">
+        <div class="container contact-main__grid">
+
+          <div class="contact-form" data-reveal>
+            <h2>Send Us a Message</h2>
+            <p>Have a question about admissions, courses, or fees? Fill out the form and our team will get back to you shortly.</p>
+
+            <div class="form-success" id="formSuccess">
+              <i class="fa-solid fa-circle-check"></i>
+              <span>Thank you! Your message has been received &mdash; we'll get back to you soon.</span>
+            </div>
+
+            <form id="contactForm" novalidate>
+              <div class="form-row">
+                <div class="form-group" id="groupName">
+                  <label for="cfName">Full Name</label>
+                  <input type="text" id="cfName" name="name" placeholder="Your full name">
+                  <p class="field-error">Please enter your name.</p>
+                </div>
+                <div class="form-group" id="groupPhone">
+                  <label for="cfPhone">Phone Number</label>
+                  <input type="tel" id="cfPhone" name="phone" placeholder="03XX-XXXXXXX">
+                  <p class="field-error">Please enter a valid phone number.</p>
+                </div>
+              </div>
+
+              <div class="form-group" id="groupEmail">
+                <label for="cfEmail">Email Address</label>
+                <input type="email" id="cfEmail" name="email" placeholder="you@example.com">
+                <p class="field-error">Please enter a valid email address.</p>
+              </div>
+
+              <div class="form-group" id="groupSubject">
+                <label for="cfSubject">Subject</label>
+                <select id="cfSubject" name="subject">
+                  <option value="">Select a topic</option>
+                  <option value="admissions">Admissions</option>
+                  <option value="fee-structure">Fee Structure</option>
+                  <option value="certificate">Certificate Verification</option>
+                  <option value="general">General Inquiry</option>
+                </select>
+                <p class="field-error">Please select a subject.</p>
+              </div>
+
+              <div class="form-group" id="groupMessage">
+                <label for="cfMessage">Message</label>
+                <textarea id="cfMessage" name="message" placeholder="Write your message here..."></textarea>
+                <p class="field-error">Please enter your message.</p>
+              </div>
+
+              <button type="submit" class="btn btn--primary">
+                Send Message <i class="fa-solid fa-paper-plane"></i>
+              </button>
+            </form>
+          </div>
+
+          <div class="contact-info">
+
+            <div class="info-card" data-reveal>
+              <div class="info-card__head">
+                <div class="info-card__icon"><i class="fa-solid fa-building"></i></div>
+                <h3>Main Campus</h3>
+              </div>
+              <div class="info-card__row"><span>Address</span><span>Main Campus, City Road, Pakistan</span></div>
+              <div class="info-card__row"><span>Phone</span><span>+92 300 1234567</span></div>
+              <div class="info-card__row"><span>Email</span><span>info@pbfl.edu.pk</span></div>
+              <div class="info-card__row"><span>Hours</span><span>Mon &ndash; Sat, 8 AM &ndash; 4 PM</span></div>
+            </div>
+
+            <div class="info-card" data-reveal>
+              <div class="info-card__head">
+                <div class="info-card__icon"><i class="fa-solid fa-graduation-cap"></i></div>
+                <h3>Practical Based Academia</h3>
+              </div>
+              <div class="info-card__row"><span>Address</span><span>Lane No. 1, Razzaq Town, Rawalpindi</span></div>
+              <div class="info-card__row"><span>Main Office</span><span>0314-5226641</span></div>
+              <div class="info-card__row"><span>More Info</span><span>0313-8541740</span></div>
+              <div class="info-card__row"><span>Hours</span><span>8 AM &ndash; 8 PM Daily</span></div>
+            </div>
+
+            <div class="map-frame" data-reveal>
+              <iframe
+                src="https://www.google.com/maps?q=Razzaq+Town+New+Chakra+Rawalpindi&output=embed"
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+                title="PBFL School System location map">
+              </iframe>
+            </div>
+
+            <div class="social-row" data-reveal>
+              <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+              <a href="#" aria-label="Twitter"><i class="fa-brands fa-twitter"></i></a>
+              <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+              <a href="#" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== DEPARTMENT CONTACTS ===================== -->
+      <section class="departments-contact">
+        <div class="container">
+          <div class="section-head" data-reveal>
+            <div>
+              <p class="section-head__eyebrow">Reach the Right Team</p>
+              <h2 class="section-head__title">Department Contacts</h2>
+            </div>
+            <p class="section-head__desc">Skip the queue — reach out directly to the team that can help.</p>
+          </div>
+
+          <div class="dept-grid">
+
+            <div class="dept-card dept-card--red" data-reveal>
+              <div class="dept-card__icon dept-icon-red"><i class="fa-solid fa-user-graduate"></i></div>
+              <h3>Admissions Office</h3>
+              <p class="dept-desc">New enrollments, fee structure, and admission requirements.</p>
+              <div class="dept-card__contact">
+                <span><i class="fa-solid fa-phone"></i><a href="tel:+923145226641">0314-5226641</a></span>
+                <span><i class="fa-solid fa-envelope"></i><a href="mailto:info@practicalbasedacademia.com">info@practicalbasedacademia.com</a></span>
+              </div>
+            </div>
+
+            <div class="dept-card dept-card--gold" data-reveal>
+              <div class="dept-card__icon dept-icon-gold"><i class="fa-solid fa-award"></i></div>
+              <h3>Certificate Support</h3>
+              <p class="dept-desc">Help with serial numbers, verification, or certificate downloads.</p>
+              <div class="dept-card__contact">
+                <span><i class="fa-solid fa-phone"></i><a href="tel:+923138541740">0313-8541740</a></span>
+                <span><i class="fa-solid fa-link"></i><a href="certificates.html">Verify a certificate &rarr;</a></span>
+              </div>
+            </div>
+
+            <div class="dept-card dept-card--purple" data-reveal>
+              <div class="dept-card__icon dept-icon-purple"><i class="fa-solid fa-headset"></i></div>
+              <h3>General Inquiries</h3>
+              <p class="dept-desc">Anything else — we'll point you to the right person.</p>
+              <div class="dept-card__contact">
+                <span><i class="fa-solid fa-phone"></i><a href="tel:+923001234567">+92 300 1234567</a></span>
+                <span><i class="fa-solid fa-envelope"></i><a href="mailto:info@pbfl.edu.pk">info@pbfl.edu.pk</a></span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== OFFICE HOURS ===================== -->
+      <section class="hours-strip">
+        <div class="container" data-reveal>
+          <p class="hours-strip__eyebrow">Plan Your Visit</p>
+          <h2>Office Hours</h2>
+          <div class="hours-grid">
+            <div class="hours-item">
+              <strong>Main Campus</strong>
+              <span>Mon &ndash; Sat &middot; 8:00 AM &ndash; 4:00 PM</span>
+            </div>
+            <div class="hours-item">
+              <strong>Admissions Office</strong>
+              <span>Daily &middot; 8:00 AM &ndash; 8:00 PM</span>
+            </div>
+            <div class="hours-item">
+              <strong>Sundays</strong>
+              <span>Closed</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer" id="contact">
+      <div class="container site-footer__grid">
+        <div class="footer-col footer-col--about">
+          <a href="index.html" class="footer-logo">
+            <img src="images/logo-1.png" alt="PBFL School System Logo" />
+            <span>
+              <strong
+                ><span class="logo-letter logo-letter--light">P</span
+                ><span class="logo-letter logo-letter--light">B</span
+                ><span class="logo-letter logo-letter--red">F</span
+                ><span class="logo-letter logo-letter--gold">L</span></strong
+              >
+              <small>SCHOOL SYSTEM</small>
+            </span>
+          </a>
+          <p>
+            PBFL School System is committed to providing practical based quality
+            education with modern facilities and experienced faculty for a
+            brighter future.
+          </p>
+          <ul class="footer-social">
+            <li>
+              <a href="#" aria-label="Facebook"
+                ><i class="fa-brands fa-facebook-f"></i
+              ></a>
+            </li>
+            <li>
+              <a href="#" aria-label="Twitter"
+                ><i class="fa-brands fa-twitter"></i
+              ></a>
+            </li>
+            <li>
+              <a href="#" aria-label="Instagram"
+                ><i class="fa-brands fa-instagram"></i
+              ></a>
+            </li>
+            <li>
+              <a href="#" aria-label="YouTube"
+                ><i class="fa-brands fa-youtube"></i
+              ></a>
+            </li>
+            <li>
+              <a href="#" aria-label="LinkedIn"
+                ><i class="fa-brands fa-linkedin-in"></i
+              ></a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>QUICK LINKS</h4>
+          <ul>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="index.html#academics">Academics</a></li>
+            <li><a href="index.html#admissions">Admissions</a></li>
+            <li><a href="index.html#departments">Departments</a></li>
+            <li><a href="index.html#facilities">Facilities</a></li>
+            <li><a href="contact.html">Contact Us</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>ACADEMICS</h4>
+          <ul>
+            <li><a href="#">Primary School</a></li>
+            <li><a href="#">Middle School</a></li>
+            <li><a href="#">High School</a></li>
+            <li><a href="#">College / Intermediate</a></li>
+            <li><a href="#">Professional Courses</a></li>
+            <li><a href="#">Academic Calendar</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>RESOURCES</h4>
+          <ul>
+            <li><a href="prospectus.html">Download Prospectus</a></li>
+            <li><a href="fee-structure.html">Fee Structure</a></li>
+            <li><a href="admission-form.html">Admission Form</a></li>
+            <li><a href="#">Syllabus</a></li>
+            <li><a href="#">Student Portal</a></li>
+            <li><a href="#">Results</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>CONTACT US</h4>
+          <ul class="footer-contact">
+            <li>
+              <i class="fa-solid fa-location-dot"></i> Main Campus, City Road,
+              Pakistan
+            </li>
+            <li><i class="fa-solid fa-phone"></i> +92 300 1234567</li>
+            <li><i class="fa-solid fa-envelope"></i> info@pbfl.edu.pk</li>
+            <li>
+              <i class="fa-solid fa-clock"></i> Mon - Sat: 8:00 AM - 4:00 PM
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="site-footer__bottom">
+        <div class="container site-footer__bottom-inner">
+          <p>&copy; 2026 PBFL School System. All Rights Reserved.</p>
+          <ul>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms &amp; Conditions</a></li>
+            <li><a href="#">Sitemap</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+
+    <button id="backToTop" class="back-to-top" aria-label="Back to top">
+      <i class="fa-solid fa-arrow-up"></i>
+    </button>
+
+<script>
+  // Contact form validation + success feedback.
+  // Purely client-side (no backend wired up) — mirrors the pattern
+  // already used by the newsletter form in script.js.
+  document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('contactForm');
+    if (!form) return;
+
+    const successBox = document.getElementById('formSuccess');
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const phonePattern = /^[0-9+\-\s()]{7,}$/;
+
+    const fields = [
+      { id: 'cfName',    group: 'groupName',    validate: v => v.trim().length > 1 },
+      { id: 'cfPhone',   group: 'groupPhone',   validate: v => phonePattern.test(v.trim()) },
+      { id: 'cfEmail',   group: 'groupEmail',   validate: v => emailPattern.test(v.trim()) },
+      { id: 'cfSubject', group: 'groupSubject', validate: v => v.trim().length > 0 },
+      { id: 'cfMessage', group: 'groupMessage', validate: v => v.trim().length > 4 }
+    ];
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      let allValid = true;
+
+      fields.forEach(({ id, group, validate }) => {
+        const el = document.getElementById(id);
+        const groupEl = document.getElementById(group);
+        const ok = validate(el.value);
+        groupEl.classList.toggle('has-error', !ok);
+        if (!ok) allValid = false;
+      });
+
+      if (!allValid) {
+        successBox.classList.remove('show');
+        return;
+      }
+
+      successBox.classList.add('show');
+      form.reset();
+      fields.forEach(({ group }) => document.getElementById(group).classList.remove('has-error'));
+
+      window.setTimeout(() => successBox.classList.remove('show'), 6000);
+    });
+
+    fields.forEach(({ id, group, validate }) => {
+      const el = document.getElementById(id);
+      el.addEventListener('input', () => {
+        const groupEl = document.getElementById(group);
+        if (groupEl.classList.contains('has-error') && validate(el.value)) {
+          groupEl.classList.remove('has-error');
+        }
+      });
+    });
+  });
+</script>
+    <script src="script.js"></script>
+</body>
+</html>

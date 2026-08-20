@@ -1,0 +1,612 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About Us | PBFL School System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="style.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+/* ===================== ABOUT PAGE — component styles only ===================== */
+:root{
+  --cream:#FBF2DF;
+}
+
+/* ===================== PAGE TITLE BANNER ===================== */
+.page-banner{
+  position:relative;
+  background:var(--gradient-primary);
+  color:var(--white);
+  padding-block:70px;
+  text-align:center;
+  overflow:hidden;
+}
+.page-banner::before{
+  content:"";
+  position:absolute; inset:0;
+  background:
+    radial-gradient(circle at 8% 20%, rgba(254,204,2,.18), transparent 42%),
+    radial-gradient(circle at 92% 80%, rgba(249,165,26,.16), transparent 46%);
+}
+.page-banner h1{
+  position:relative; z-index:1;
+  color:var(--white);
+  font-size:clamp(2rem, 4.5vw, 2.8rem);
+  font-weight:800;
+  letter-spacing:-.01em;
+}
+.page-banner .crumb{
+  position:relative; z-index:1;
+  margin-top:10px;
+  font-size:.82rem;
+  color:rgba(255,255,255,.8);
+  letter-spacing:.04em;
+}
+.page-banner .crumb span{ color:var(--secondary); font-weight:600; }
+
+/* ===================== ABOUT INTRO ===================== */
+.about-intro{ padding-block:80px; background:var(--white); }
+.about-intro__grid{
+  display:grid;
+  grid-template-columns:340px 1fr;
+  gap:56px;
+  align-items:start;
+}
+.about-intro__title{
+  font-size:clamp(1.8rem,3vw,2.3rem);
+  font-weight:800;
+  color:var(--heading);
+  line-height:1.25;
+  margin-bottom:18px;
+}
+.about-intro__rule{
+  width:64px; height:4px;
+  background:var(--gold);
+  border-radius:var(--radius-pill);
+}
+.about-intro__body p{
+  color:#555;
+  font-size:.98rem;
+  margin-bottom:20px;
+}
+.about-intro__body p:last-child{ margin-bottom:0; }
+.about-intro__body strong{ color:var(--heading); }
+
+/* ===================== QUOTE / PRESIDENT ===================== */
+.about-quote{ background:var(--cream); padding-block:80px; }
+.about-quote__grid{
+  display:grid;
+  grid-template-columns:220px 1fr;
+  gap:56px;
+  align-items:center;
+}
+.about-quote__logo{
+  width:200px; height:200px;
+  border-radius:var(--radius-round);
+  object-fit:cover;
+  margin-inline:auto;
+  background:var(--white);
+  box-shadow:var(--shadow);
+}
+.about-quote__mark{
+  font-size:2.4rem;
+  color:var(--gold);
+  line-height:1;
+  margin-bottom:18px;
+  font-family:Georgia, serif;
+}
+.about-quote blockquote{
+  font-size:clamp(1.15rem,2.4vw,1.5rem);
+  font-style:italic;
+  color:var(--heading);
+  font-weight:500;
+  line-height:1.5;
+  margin-bottom:22px;
+}
+.about-quote__author{
+  font-size:.95rem;
+  color:var(--maroon);
+}
+.about-quote__author strong{ color:var(--heading); font-weight:700; }
+
+/* ===================== STATS ===================== */
+.about-stats{ padding-block:60px; background:var(--white); }
+.about-stats__label{
+  text-align:center;
+  font-weight:700;
+  color:var(--maroon);
+  font-size:.9rem;
+  margin-bottom:36px;
+  letter-spacing:.02em;
+}
+.about-stats__grid{
+  display:grid;
+  grid-template-columns:repeat(4, 1fr);
+  gap:24px;
+  text-align:center;
+}
+.about-stat__number{
+  display:block;
+  font-size:2.4rem;
+  font-weight:800;
+  color:var(--gold);
+  margin-bottom:6px;
+}
+.about-stat p{ color:#666; font-size:.88rem; }
+.about-stats__divider{
+  border:none;
+  border-top:1px solid var(--border);
+  margin-top:50px;
+}
+
+/* ===================== INFO ROWS (mission / values / philosophy) ===================== */
+.info-row{
+  display:grid;
+  grid-template-columns:240px 1fr;
+  gap:40px;
+  padding-block:38px;
+  border-bottom:1px solid var(--border);
+}
+.info-row:last-of-type{ border-bottom:none; }
+.info-row__label{
+  font-weight:700;
+  color:var(--heading);
+  font-size:1.02rem;
+}
+.info-row__content p{ color:#555; font-size:.95rem; }
+.values-list{ display:flex; flex-direction:column; gap:14px; }
+.values-list li{
+  color:#555;
+  font-size:.95rem;
+  display:flex;
+  gap:10px;
+  align-items:flex-start;
+}
+.values-list li i{
+  color:var(--gold);
+  margin-top:5px;
+  font-size:.7rem;
+  flex-shrink:0;
+}
+.values-list strong{ color:var(--heading); }
+
+.info-section{ padding-block:20px 80px; background:var(--white); }
+
+/* ===================== CONTACT STRIP ===================== */
+.contact-strip{ background:var(--cream); padding-block:60px; }
+.contact-strip__grid{
+  display:grid;
+  grid-template-columns:1.3fr 1fr 1fr;
+  gap:40px;
+}
+.contact-strip h3{
+  font-size:1.4rem;
+  font-weight:800;
+  color:var(--heading);
+  margin-bottom:14px;
+}
+.contact-strip h4{
+  font-size:1.05rem;
+  font-weight:700;
+  color:var(--heading);
+  margin-bottom:14px;
+}
+.contact-strip p{ color:#555; font-size:.92rem; margin-bottom:6px; }
+.contact-strip .addr{ color:#555; font-size:.92rem; max-width:280px; }
+
+/* ===================== RESPONSIVE ===================== */
+@media (max-width:900px){
+  .about-intro__grid,
+  .about-quote__grid{ grid-template-columns:1fr; gap:28px; }
+  .about-quote__logo{ width:150px; height:150px; }
+  .about-stats__grid{ grid-template-columns:repeat(2,1fr); gap:36px; }
+  .info-row{ grid-template-columns:1fr; gap:14px; }
+  .contact-strip__grid{ grid-template-columns:1fr; gap:30px; }
+}
+@media (max-width:480px){
+  .page-banner{ padding-block:50px; }
+  .about-intro{ padding-block:56px; }
+  .about-quote{ padding-block:56px; }
+  .about-stats__grid{ grid-template-columns:1fr 1fr; }
+}
+</style>
+</head>
+<body>
+
+    <header class="site-header" id="siteHeader">
+      <div class="top-bar">
+        <div class="container top-bar__inner">
+           <ul class="top-bar__contact">
+            <li><i class="fa-solid fa-phone"></i> +92 314 5226641</li>
+            <li><i class="fa-solid fa-envelope"></i>info@practicalbasedacademia.com</li>
+            <li>
+              <i class="fa-solid fa-location-dot"></i>  Main Campus, City Road,
+              Pakistan
+            </li>
+          </ul>
+          <div class="top-bar__right">
+            <ul class="top-bar__portals">
+              <li>
+                <a href="#"><i class="fa-solid fa-user"></i> Student Portal</a>
+              </li>
+              <li>
+                <a href="#"><i class="fa-solid fa-user"></i> Parent Portal</a>
+              </li>
+              <li>
+                <a href="#"><i class="fa-solid fa-user"></i> Staff Portal</a>
+              </li>
+              <li>
+                <a href="certificates.html"><i class="fa-solid fa-award"></i> Verify Certificate</a>
+              </li>
+            </ul>
+            <ul class="top-bar__social">
+              <li>
+                <a href="#" aria-label="Facebook"
+                  ><i class="fa-brands fa-facebook-f"></i
+                ></a>
+              </li>
+              <li>
+                <a href="#" aria-label="Twitter"
+                  ><i class="fa-brands fa-twitter"></i
+                ></a>
+              </li>
+              <li>
+                <a href="#" aria-label="Instagram"
+                  ><i class="fa-brands fa-instagram"></i
+                ></a>
+              </li>
+              <li>
+                <a href="#" aria-label="YouTube"
+                  ><i class="fa-brands fa-youtube"></i
+                ></a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <nav class="navbar" id="navbar">
+        <div class="container navbar__inner">
+          <a href="index.html" class="navbar__logo">
+            <img
+              src="images/logo-1.png"
+              alt="PBFL School System Logo"
+              class="navbar__logo-img"
+            />
+            <span class="navbar__logo-text">
+              <strong
+                ><span class="logo-letter logo-letter--dark">P</span
+                ><span class="logo-letter logo-letter--dark">B</span
+                ><span class="logo-letter logo-letter--red">F</span
+                ><span class="logo-letter logo-letter--gold">L</span></strong
+              >
+              <small>PRACTICAL BASED FAST LEARNING<br />SCHOOL SYSTEM</small>
+            </span>
+          </a>
+
+          <ul class="navbar__menu" id="navbarMenu">
+            <li><a href="index.html">HOME</a></li>
+            <li><a href="about.html" class="active">ABOUT US</a></li>
+                         <li><a href="index.html#academics">ACADEMICS</a></li>
+
+            <li class="has-dropdown">
+              <a href="index.html#admissions"
+                >ADMISSIONS <i class="fa-solid fa-chevron-down"></i
+              ></a>
+              <ul class="dropdown">
+                <li><a href="admission-form.html">Admission Form</a></li>
+                <li><a href="fee-structure.html">Fee Structure</a></li>
+                <li><a href="prospectus.html">Prospectus</a></li>
+              </ul>
+            </li>
+            <li class="has-dropdown">
+              <a href="index.html#departments"
+                >DEPARTMENTS <i class="fa-solid fa-chevron-down"></i
+              ></a>
+              <ul class="dropdown">
+                <li><a href="#">Science</a></li>
+                <li><a href="#">Computer</a></li>
+                <li><a href="#">Arts</a></li>
+              </ul>
+            </li>
+            <li><a href="index.html#facilities">FACILITIES</a></li>
+            <li><a href="index.html#gallery">GALLERY</a></li>
+            <li><a href="index.html#events">EVENTS</a></li>
+            <li><a href="index.html#contact">CONTACT</a></li>
+          </ul>
+
+          <a href="index.html#admissions" class="btn btn--primary navbar__cta"
+            >APPLY NOW</a
+          >
+
+          <button
+            class="navbar__toggle"
+            id="navbarToggle"
+            aria-label="Toggle navigation"
+          >
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+        </div>
+      </nav>
+    </header>
+
+    <main>
+
+    <!-- ===================== PAGE TITLE BANNER ===================== -->
+    <section class="page-banner">
+      <div class="container">
+        <h1>About Us</h1>
+        <p class="crumb">Home &nbsp;/&nbsp; <span>About</span></p>
+      </div>
+    </section>
+
+    <!-- ===================== ABOUT INTRO ===================== -->
+    <section class="about-intro">
+      <div class="container about-intro__grid">
+        <div>
+          <h2 class="about-intro__title">Practical Based Academia</h2>
+          <div class="about-intro__rule"></div>
+        </div>
+        <div class="about-intro__body">
+          <p><strong>Practical Based Academia</strong> is committed to delivering academically rigorous coaching that prepares students for real achievement in their board exams and beyond. Our learners step forward with confidence, discipline, and the skills to excel in their studies and contribute meaningfully to their communities. From core academics to practical activities and guided support, each day is designed to fuel growth, sharpen focus, and make learning both rewarding and engaging.</p>
+          <p>We are deeply committed to the students we serve and to their pursuit of Academic Excellence. Our faculty works with focus and purpose, supporting each learner through disciplined guidance and genuine care. We take pride in the trust of engaged parents, supportive partners, and a growing community that believes in our mission and stands with us as our students rise.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== QUOTE / PRESIDENT ===================== -->
+    <section class="about-quote">
+      <div class="container about-quote__grid">
+        <img src="images/logo-1.png" alt="PBFL School System Logo" class="about-quote__logo">
+        <div>
+          <div class="about-quote__mark"><i class="fa-solid fa-quote-left"></i></div>
+          <blockquote>We inspire students to achieve Academic Excellence by encouraging them to learn more, work harder, and reach their full potential.</blockquote>
+          <p class="about-quote__author"><strong>Irfan Ullah Khan Niazi</strong> &mdash; President</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== STATS ===================== -->
+    <section class="about-stats">
+      <div class="container">
+        <p class="about-stats__label">We're the best in Pakistan:</p>
+        <div class="about-stats__grid">
+          <div class="about-stat" data-reveal>
+            <span class="about-stat__number" data-count="2000" data-suffix="+">0</span>
+            <p>Current Enrollments</p>
+          </div>
+          <div class="about-stat" data-reveal>
+            <span class="about-stat__number" data-count="20" data-suffix="+">0</span>
+            <p>Qualified Staff</p>
+          </div>
+          <div class="about-stat" data-reveal>
+            <span class="about-stat__number" data-count="30" data-suffix="+">0</span>
+            <p>Classes</p>
+          </div>
+          <div class="about-stat" data-reveal>
+            <span class="about-stat__number" data-count="100" data-suffix="+">0</span>
+            <p>Topping Students</p>
+          </div>
+        </div>
+        <hr class="about-stats__divider">
+      </div>
+    </section>
+
+    <!-- ===================== MISSION / VALUES / PHILOSOPHY ===================== -->
+    <section class="info-section">
+      <div class="container">
+
+        <div class="info-row">
+          <div class="info-row__label">Mission Statement</div>
+          <div class="info-row__content">
+            <p>Our mission is to drive Academic Excellence by guiding students toward strong board exam results, building confidence, and equipping them with the discipline and support needed to succeed in their academic journey and beyond.</p>
+          </div>
+        </div>
+
+        <div class="info-row">
+          <div class="info-row__label">Our Core Values</div>
+          <div class="info-row__content">
+            <ul class="values-list">
+              <li><i class="fa-solid fa-circle"></i> <span><strong>Discipline:</strong> Progress demands consistency.</span></li>
+              <li><i class="fa-solid fa-circle"></i> <span><strong>Respect:</strong> Every learner deserves dignity.</span></li>
+              <li><i class="fa-solid fa-circle"></i> <span><strong>Growth:</strong> We push students to rise, not settle.</span></li>
+              <li><i class="fa-solid fa-circle"></i> <span><strong>Honesty:</strong> Results matter &mdash; so does the truth.</span></li>
+              <li><i class="fa-solid fa-circle"></i> <span><strong>Support:</strong> No student climbs alone.</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="info-row">
+          <div class="info-row__label">Our Philosophy</div>
+          <div class="info-row__content">
+            <p>We believe students don't fail from lack of ability, but from lack of guidance, structure, and belief. When teaching is focused and the environment is respectful, even the most uncertain learners can surpass expectations. Excellence is not born &mdash; it's earned.</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ===================== CONTACT STRIP ===================== -->
+    <section class="contact-strip">
+      <div class="container contact-strip__grid">
+        <div>
+          <h3>Practical Based Academia</h3>
+          <p class="addr">Lane No. 1, Razzaq Town, near Allied School, New Chakra, Rawalpindi</p>
+        </div>
+        <div>
+          <h4>Main Office</h4>
+          <p>0314-5226641</p>
+          <p>8:00 a.m. &ndash; 8:00 p.m.</p>
+        </div>
+        <div>
+          <h4>For More Info</h4>
+          <p>0313-8541740</p>
+          <p>info@practicalbasedacademia.com</p>
+        </div>
+      </div>
+    </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer" id="contact">
+      <div class="container site-footer__grid">
+        <div class="footer-col footer-col--about">
+          <a href="index.html" class="footer-logo">
+            <img src="images/logo-1.png" alt="PBFL School System Logo" />
+            <span>
+              <strong
+                ><span class="logo-letter logo-letter--light">P</span
+                ><span class="logo-letter logo-letter--light">B</span
+                ><span class="logo-letter logo-letter--red">F</span
+                ><span class="logo-letter logo-letter--gold">L</span></strong
+              >
+              <small>SCHOOL SYSTEM</small>
+            </span>
+          </a>
+          <p>
+            PBFL School System is committed to providing practical based quality
+            education with modern facilities and experienced faculty for a
+            brighter future.
+          </p>
+          <ul class="footer-social">
+            <li>
+              <a href="#" aria-label="Facebook"
+                ><i class="fa-brands fa-facebook-f"></i
+              ></a>
+            </li>
+            <li>
+              <a href="#" aria-label="Twitter"
+                ><i class="fa-brands fa-twitter"></i
+              ></a>
+            </li>
+            <li>
+              <a href="#" aria-label="Instagram"
+                ><i class="fa-brands fa-instagram"></i
+              ></a>
+            </li>
+            <li>
+              <a href="#" aria-label="YouTube"
+                ><i class="fa-brands fa-youtube"></i
+              ></a>
+            </li>
+            <li>
+              <a href="#" aria-label="LinkedIn"
+                ><i class="fa-brands fa-linkedin-in"></i
+              ></a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>QUICK LINKS</h4>
+          <ul>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="index.html#academics">Academics</a></li>
+            <li><a href="index.html#admissions">Admissions</a></li>
+            <li><a href="index.html#departments">Departments</a></li>
+            <li><a href="index.html#facilities">Facilities</a></li>
+            <li><a href="index.html#contact">Contact Us</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>ACADEMICS</h4>
+          <ul>
+            <li><a href="#">Primary School</a></li>
+            <li><a href="#">Middle School</a></li>
+            <li><a href="#">High School</a></li>
+            <li><a href="#">College / Intermediate</a></li>
+            <li><a href="#">Professional Courses</a></li>
+            <li><a href="#">Academic Calendar</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>RESOURCES</h4>
+          <ul>
+            <li><a href="prospectus.html">Download Prospectus</a></li>
+            <li><a href="fee-structure.html">Fee Structure</a></li>
+            <li><a href="admission-form.html">Admission Form</a></li>
+            <li><a href="#">Syllabus</a></li>
+            <li><a href="#">Student Portal</a></li>
+            <li><a href="#">Results</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>CONTACT US</h4>
+          <ul class="footer-contact">
+            <li>
+              <i class="fa-solid fa-location-dot"></i> Main Campus, City Road,
+              Pakistan
+            </li>
+            <li><i class="fa-solid fa-phone"></i> +92 300 1234567</li>
+            <li><i class="fa-solid fa-envelope"></i> info@pbfl.edu.pk</li>
+            <li>
+              <i class="fa-solid fa-clock"></i> Mon - Sat: 8:00 AM - 4:00 PM
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="site-footer__bottom">
+        <div class="container site-footer__bottom-inner">
+          <p>&copy; 2026 PBFL School System. All Rights Reserved.</p>
+          <ul>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms &amp; Conditions</a></li>
+            <li><a href="#">Sitemap</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+
+    <button id="backToTop" class="back-to-top" aria-label="Back to top">
+      <i class="fa-solid fa-arrow-up"></i>
+    </button>
+
+<script>
+  // Counter animation for the stats section — matches the counter
+  // behaviour already used elsewhere on the PBFL site (script.js).
+  document.addEventListener('DOMContentLoaded', () => {
+    const counters = document.querySelectorAll('.about-stat__number');
+    if (!counters.length) return;
+
+    const animateCounter = (el) => {
+      const target = parseInt(el.dataset.count, 10) || 0;
+      const suffix = el.dataset.suffix || '';
+      const duration = 1800;
+      const startTime = performance.now();
+
+      const step = (now) => {
+        const progress = Math.min((now - startTime) / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        const value = Math.floor(eased * target);
+        el.textContent = value.toLocaleString() + suffix;
+        if (progress < 1) requestAnimationFrame(step);
+        else el.textContent = target.toLocaleString() + suffix;
+      };
+      requestAnimationFrame(step);
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          animateCounter(entry.target);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.5 });
+
+    counters.forEach((counter) => observer.observe(counter));
+  });
+</script>
+    <script src="script.js"></script>
+</body>
+</html>
