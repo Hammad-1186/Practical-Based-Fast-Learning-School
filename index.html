@@ -19,60 +19,104 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
     />
     <link rel="stylesheet" href="style.css" />
+    <style>
+      /* ============================================================
+         EXPLORE MORE SECTION — component styles only.
+         Reuses existing tokens/utility classes from style.css
+         (.section-head, --gradient-primary, --gradient-gold, --radius,
+         --shadow, --transition, etc.) — nothing here is duplicated.
+         ============================================================ */
+      .explore{
+        padding-block: var(--section-padding);
+        background: var(--light);
+      }
+      .explore__grid{
+        display:grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap:24px;
+      }
+      .explore-card{
+        display:block;
+        position:relative;
+        background:var(--white);
+        border-radius:var(--radius);
+        border:1px solid var(--border);
+        box-shadow:var(--shadow-sm);
+        padding:32px 26px;
+        overflow:hidden;
+        isolation:isolate;
+        transition:transform .4s cubic-bezier(.22,1,.36,1), box-shadow .4s ease, border-color .4s ease;
+      }
+      .explore-card::before{
+        content:"";
+        position:absolute;
+        top:0; left:0; right:0;
+        height:4px;
+        background:var(--gradient-primary);
+        transform:scaleX(0);
+        transform-origin:left;
+        transition:transform .45s cubic-bezier(.22,1,.36,1);
+      }
+      .explore-card:hover{
+        transform:translateY(-10px);
+        box-shadow:0 22px 40px rgba(2,1,1,.12);
+        border-color:transparent;
+      }
+      .explore-card:hover::before{ transform:scaleX(1); }
+
+      .explore-card__icon{
+        width:60px;
+        height:60px;
+        border-radius:var(--radius-round);
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        color:var(--white);
+        font-size:1.3rem;
+        margin-bottom:20px;
+        transition:transform .5s cubic-bezier(.34,1.56,.64,1), box-shadow .4s ease;
+      }
+      .explore-card__icon--red{ background:var(--gradient-primary); }
+      .explore-card__icon--gold{ background:var(--gradient-gold); }
+      .explore-card:hover .explore-card__icon{ transform:scale(1.12) rotate(-8deg); }
+      .explore-card:hover .explore-card__icon--red{ box-shadow:0 12px 26px rgba(220,41,25,.4); }
+      .explore-card:hover .explore-card__icon--gold{ box-shadow:0 12px 26px rgba(249,165,26,.4); }
+
+      .explore-card h3{
+        font-size:1.05rem;
+        margin-bottom:10px;
+        transition:color .3s ease;
+      }
+      .explore-card:hover h3{ color:var(--primary); }
+
+      .explore-card p{
+        font-size:var(--fs-sm);
+        color:#666;
+        margin-bottom:18px;
+      }
+
+      .explore-card__link{
+        display:inline-flex;
+        align-items:center;
+        gap:8px;
+        font-weight:600;
+        font-size:var(--fs-sm);
+        color:var(--primary);
+        position:relative;
+      }
+      .explore-card__link i{ transition:transform .35s cubic-bezier(.34,1.56,.64,1); }
+      .explore-card:hover .explore-card__link i{ transform:translateX(6px); }
+
+      @media (max-width:1200px){
+        .explore__grid{ grid-template-columns:repeat(2, 1fr); }
+      }
+      @media (max-width:480px){
+        .explore__grid{ grid-template-columns:1fr; }
+      }
+    </style>
   </head>
   <body>
     <header class="site-header" id="siteHeader">
-      <!-- <div class="top-bar">
-        <div class="container top-bar__inner">
-          <ul class="top-bar__contact">
-            <li><i class="fa-solid fa-phone"></i> +92 314 5226641</li>
-            <li><i class="fa-solid fa-envelope"></i>info@practicalbasedacademia.com</li>
-            <li>
-              <i class="fa-solid fa-location-dot"></i> Main Campus, City Road,
-              Pakistan
-            </li>
-          </ul>
-          <div class="top-bar__right">
-            <ul class="top-bar__portals">
-              <li>
-                <a href="#"><i class="fa-solid fa-user"></i> Student Portal</a>
-              </li>
-              <li>
-                <a href="#"><i class="fa-solid fa-user"></i> Parent Portal</a>
-              </li>
-              <li>
-                <a href="#"><i class="fa-solid fa-user"></i> Staff Portal</a>
-              </li>
-              <li>
-                <a href="certificates.html"><i class="fa-solid fa-award"></i> Verify Certificate</a>
-              </li>
-            </ul>
-            <ul class="top-bar__social">
-              <li>
-                <a href="#" aria-label="Facebook"
-                  ><i class="fa-brands fa-facebook-f"></i
-                ></a>
-              </li>
-              <li>
-                <a href="#" aria-label="Twitter"
-                  ><i class="fa-brands fa-twitter"></i
-                ></a>
-              </li>
-              <li>
-                <a href="#" aria-label="Instagram"
-                  ><i class="fa-brands fa-instagram"></i
-                ></a>
-              </li>
-              <li>
-                <a href="#" aria-label="YouTube"
-                  ><i class="fa-brands fa-youtube"></i
-                ></a>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div> -->
-
       <nav class="navbar" id="navbar">
         <div class="container navbar__inner">
           <a href="index.html" class="navbar__logo">
@@ -95,26 +139,12 @@
           <ul class="navbar__menu" id="navbarMenu">
             <li><a href="index.html" class="active">HOME</a></li>
             <li><a href="about.html">ABOUT US</a></li>
-             <li><a href="#academics">ACADEMICS</a></li>
-            <li class="has-dropdown">
-              <a href="#admissions"
-                >ADMISSIONS <i class="fa-solid fa-chevron-down"></i
-              ></a>
-              <ul class="dropdown">
-                <li><a href="admission-form.html">Admission Form</a></li>
-                <li><a href="fee-structure.html">Fee Structure</a></li>
-                <li><a href="prospectus.html">Prospectus</a></li>
-              </ul>
-            </li>
+            <li><a href="#academics">ACADEMICS</a></li>
+            <li><a href="fee-structure.html">FEE STRUCTURE</a></li>
             <li><a href="#facilities">FACULTY</a></li>
             <li><a href="certificates.html">CERTIFICATES</a></li>
-
-            <!-- <li><a href="gallery">GALLERY</a></li> -->
-            <!-- <li><a href="#events">EVENTS</a></li> -->
             <li><a href="contact.html">CONTACT</a></li>
           </ul>
-
-        
 
           <button
             class="navbar__toggle"
@@ -356,6 +386,18 @@
             </div>
             <div class="program-card" data-reveal>
               <div class="program-card__icon program-card__icon--gold">
+                <i class="fa-solid fa-building-columns"></i>
+              </div>
+              <h3>College / Intermediate</h3>
+              <p>
+                Pre-Engineering, Pre-Medical, ICS, I.Com with expert mentorship.
+              </p>
+              <a href="#" class="read-more"
+                >Read More <i class="fa-solid fa-arrow-right"></i
+              ></a>
+            </div>
+            <div class="program-card" data-reveal>
+              <div class="program-card__icon program-card__icon--red">
                 <i class="fa-solid fa-computer"></i>
               </div>
               <h3>Professional Courses</h3>
@@ -455,110 +497,60 @@
         </div>
       </section>
 
-      <!-- Events & News -->
-      <section class="events-news" id="events">
-        <div class="container events-news__grid">
-          <div class="events-col" data-reveal>
-            <h2 class="events-col__title">UPCOMING EVENTS</h2>
-            <div class="event-item">
-              <div class="event-item__date"><span>25</span>MAY</div>
-              <div class="event-item__info">
-                <h4>Science Exhibition 2025</h4>
-                <p>
-                  <i class="fa-solid fa-location-dot"></i> Venue: Main Campus
-                </p>
-                <p><i class="fa-solid fa-clock"></i> Time: 10:00 AM</p>
-              </div>
+      <!-- Explore More -->
+      <section class="explore" id="explore">
+        <div class="container">
+          <div class="section-head">
+            <div class="section-head__text" data-reveal>
+              <p class="section-head__eyebrow">EXPLORE MORE</p>
+              <h2 class="section-head__title">
+                Everything You Need,<br />One Click Away
+              </h2>
             </div>
-            <div class="event-item">
-              <div class="event-item__date"><span>05</span>JUN</div>
-              <div class="event-item__info">
-                <h4>Annual Sports Week</h4>
-                <p>
-                  <i class="fa-solid fa-location-dot"></i> Venue: Sports Complex
-                </p>
-                <p><i class="fa-solid fa-clock"></i> Time: 09:00 AM</p>
-              </div>
-            </div>
-            <div class="event-item">
-              <div class="event-item__date"><span>15</span>JUN</div>
-              <div class="event-item__info">
-                <h4>Parent Teacher Meeting</h4>
-                <p>
-                  <i class="fa-solid fa-location-dot"></i> Venue: Main
-                  Auditorium
-                </p>
-                <p><i class="fa-solid fa-clock"></i> Time: 11:00 AM</p>
-              </div>
-            </div>
-            <a href="#" class="btn btn--primary events-col__btn"
-              >VIEW ALL EVENTS <i class="fa-solid fa-arrow-right"></i
-            ></a>
+            <p class="section-head__desc" data-reveal>
+              From learning about our story to checking fees or verifying a
+              certificate — find what you're looking for in seconds.
+            </p>
           </div>
 
-          <div class="news-col" data-reveal>
-            <div class="news-col__head">
-              <h2 class="news-col__title">LATEST NEWS</h2>
-              <a href="#" class="btn btn--secondary"
-                >VIEW ALL NEWS <i class="fa-solid fa-arrow-right"></i
-              ></a>
-            </div>
+          <div class="explore__grid">
 
-            <div class="news-col__grid">
-              <article class="news-card">
-                <div class="news-card__image">
-                  <img src="images/news1.jpg" alt="New Campus Inauguration" />
-                </div>
-                <div class="news-card__body">
-                  <h4>New Campus Inauguration</h4>
-                  <p>
-                    We are excited to announce the opening of our new campus.
-                  </p>
-                  <div class="news-card__meta">
-                    <span>May 18, 2025</span>
-                    <a href="#"
-                      >Read More <i class="fa-solid fa-arrow-right"></i
-                    ></a>
-                  </div>
-                </div>
-              </article>
-              <article class="news-card">
-                <div class="news-card__image">
-                  <img src="images/news2.jpg" alt="Admissions Open 2025" />
-                </div>
-                <div class="news-card__body">
-                  <h4>Admissions Open 2025</h4>
-                  <p>Admissions are now open for academic session 2025-26.</p>
-                  <div class="news-card__meta">
-                    <span>May 15, 2025</span>
-                    <a href="#"
-                      >Read More <i class="fa-solid fa-arrow-right"></i
-                    ></a>
-                  </div>
-                </div>
-              </article>
-              <article class="news-card">
-                <div class="news-card__image">
-                  <img
-                    src="images/news3.jpg"
-                    alt="Robotics Team Wins National Competition"
-                  />
-                </div>
-                <div class="news-card__body">
-                  <h4>Robotics Team Wins National Competition</h4>
-                  <p>
-                    Our robotics team secured 1st position in the National
-                    Robotics Championship.
-                  </p>
-                  <div class="news-card__meta">
-                    <span>May 10, 2025</span>
-                    <a href="#"
-                      >Read More <i class="fa-solid fa-arrow-right"></i
-                    ></a>
-                  </div>
-                </div>
-              </article>
-            </div>
+            <a href="about.html" class="explore-card" data-reveal>
+              <div class="explore-card__icon explore-card__icon--red">
+                <i class="fa-solid fa-people-group"></i>
+              </div>
+              <h3>About Us</h3>
+              <p>Our mission, values, and the people behind PBFL School System.</p>
+              <span class="explore-card__link">Learn More <i class="fa-solid fa-arrow-right"></i></span>
+            </a>
+
+            <a href="fee-structure.html" class="explore-card" data-reveal>
+              <div class="explore-card__icon explore-card__icon--gold">
+                <i class="fa-solid fa-file-invoice-dollar"></i>
+              </div>
+              <h3>Fee Structure</h3>
+              <p>Transparent, semester-based fees with flexible installment plans.</p>
+              <span class="explore-card__link">View Fees <i class="fa-solid fa-arrow-right"></i></span>
+            </a>
+
+            <a href="certificates.html" class="explore-card" data-reveal>
+              <div class="explore-card__icon explore-card__icon--red">
+                <i class="fa-solid fa-award"></i>
+              </div>
+              <h3>Certificate Verification</h3>
+              <p>Search, view, and download any student's course certificate.</p>
+              <span class="explore-card__link">Verify Now <i class="fa-solid fa-arrow-right"></i></span>
+            </a>
+
+            <a href="contact.html" class="explore-card" data-reveal>
+              <div class="explore-card__icon explore-card__icon--gold">
+                <i class="fa-solid fa-headset"></i>
+              </div>
+              <h3>Contact Us</h3>
+              <p>Reach our admissions team, get directions, or send a message.</p>
+              <span class="explore-card__link">Get in Touch <i class="fa-solid fa-arrow-right"></i></span>
+            </a>
+
           </div>
         </div>
       </section>
@@ -613,7 +605,7 @@
             </li>
           </ul>
         </div>
- 
+
         <div class="footer-col">
           <h4>QUICK LINKS</h4>
           <ul>
@@ -625,7 +617,7 @@
             <li><a href="contact.html">Contact</a></li>
           </ul>
         </div>
- 
+
         <div class="footer-col">
           <h4>ADMISSIONS</h4>
           <ul>
@@ -634,7 +626,7 @@
             <li><a href="prospectus.html">Prospectus</a></li>
           </ul>
         </div>
- 
+
         <div class="footer-col">
           <h4>CONTACT US</h4>
           <ul class="footer-contact">
@@ -650,7 +642,7 @@
           </ul>
         </div>
       </div>
- 
+
       <div class="site-footer__bottom">
         <div class="container site-footer__bottom-inner">
           <p>&copy; 2026 PBFL School System. All Rights Reserved.</p>
