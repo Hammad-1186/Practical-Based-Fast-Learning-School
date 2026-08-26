@@ -138,62 +138,29 @@ main.verify-main{ max-width:760px; margin:0 auto; padding:52px 20px 20px; min-he
   .search-wrap{ margin-top:-34px; }
   .cat-grid{ grid-template-columns:1fr; }
 }
+
+/* ============================================================
+   PERFORMANCE PERFORMA — component styles only.
+   Displayed exactly like the certificate: a bordered image frame
+   with Download + Open Full Size actions. The performa itself is
+   a real image file (same as certificate images), not generated.
+   ============================================================ */
+.performa-wrap{ margin-top:28px; padding-top:24px; border-top:1px dashed var(--border); }
+.performa-wrap__label{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-size:.82rem;
+  font-weight:700;
+  color:var(--maroon);
+  margin-bottom:14px;
+}
+.performa-wrap__label i{ color:var(--gold); }
 </style>
 </head>
 <body>
 
-<header class="site-header" id="siteHeader">
-      <!-- <div class="top-bar">
-        <div class="container top-bar__inner">
-          <ul class="top-bar__contact">
-            <li><i class="fa-solid fa-phone"></i> +92 314 5226641</li>
-            <li><i class="fa-solid fa-envelope"></i>info@practicalbasedacademia.com</li>
-            <li>
-              <i class="fa-solid fa-location-dot"></i> Main Campus, City Road,
-              Pakistan
-            </li>
-          </ul>
-          <div class="top-bar__right">
-            <ul class="top-bar__portals">
-              <li>
-                <a href="#"><i class="fa-solid fa-user"></i> Student Portal</a>
-              </li>
-              <li>
-                <a href="#"><i class="fa-solid fa-user"></i> Parent Portal</a>
-              </li>
-              <li>
-                <a href="#"><i class="fa-solid fa-user"></i> Staff Portal</a>
-              </li>
-              <li>
-                <a href="certificates.html"><i class="fa-solid fa-award"></i> Verify Certificate</a>
-              </li>
-            </ul>
-            <ul class="top-bar__social">
-              <li>
-                <a href="#" aria-label="Facebook"
-                  ><i class="fa-brands fa-facebook-f"></i
-                ></a>
-              </li>
-              <li>
-                <a href="#" aria-label="Twitter"
-                  ><i class="fa-brands fa-twitter"></i
-                ></a>
-              </li>
-              <li>
-                <a href="#" aria-label="Instagram"
-                  ><i class="fa-brands fa-instagram"></i
-                ></a>
-              </li>
-              <li>
-                <a href="#" aria-label="YouTube"
-                  ><i class="fa-brands fa-youtube"></i
-                ></a>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div> -->
-
+    <header class="site-header" id="siteHeader">
       <nav class="navbar" id="navbar">
         <div class="container navbar__inner">
           <a href="index.html" class="navbar__logo">
@@ -214,20 +181,23 @@ main.verify-main{ max-width:760px; margin:0 auto; padding:52px 20px 20px; min-he
           </a>
 
           <ul class="navbar__menu" id="navbarMenu">
-            <li><a href="index.html" class="active">HOME</a></li>
+            <li><a href="index.html">HOME</a></li>
             <li><a href="about.html">ABOUT US</a></li>
-             <li><a href="index.html#academics">ACADEMICS</a></li>
-                        <li><a href="fee-structure.html">FEE STRUCTURE</a></li>
-
-            <li><a href="#facilities">FACULTY</a></li>
-            <li><a href="certificates.html">CERTIFICATES</a></li>
-
-            <!-- <li><a href="gallery">GALLERY</a></li> -->
-            <!-- <li><a href="#events">EVENTS</a></li> -->
+            <li><a href="index.html#academics">ACADEMICS</a></li>
+            <li class="has-dropdown">
+              <a href="index.html#admissions"
+                >ADMISSIONS <i class="fa-solid fa-chevron-down"></i
+              ></a>
+              <ul class="dropdown">
+                <li><a href="admission-form.html">Admission Form</a></li>
+                <li><a href="fee-structure.html">Fee Structure</a></li>
+                <li><a href="prospectus.html">Prospectus</a></li>
+              </ul>
+            </li>
+            <li><a href="index.html#facilities">FACULTY</a></li>
+            <li><a href="certificates.html" class="active">CERTIFICATES</a></li>
             <li><a href="contact.html">CONTACT</a></li>
           </ul>
-
-        
 
           <button
             class="navbar__toggle"
@@ -241,7 +211,6 @@ main.verify-main{ max-width:760px; margin:0 auto; padding:52px 20px 20px; min-he
         </div>
       </nav>
     </header>
-
 
 <section class="verify-hero">
   <div class="container verify-hero__inner">
@@ -288,6 +257,17 @@ main.verify-main{ max-width:760px; margin:0 auto; padding:52px 20px 20px; min-he
     <div class="actions">
       <a href="#" id="downloadBtn" class="btn-primary" download><i class="fa-solid fa-download"></i> Download Certificate</a>
       <a href="#" id="openBtn" class="btn-secondary" target="_blank" rel="noopener"><i class="fa-solid fa-up-right-from-square"></i> Open Full Size</a>
+    </div>
+
+    <div class="performa-wrap" id="performaWrap">
+      <p class="performa-wrap__label"><i class="fa-solid fa-clipboard-list"></i> Performance Performa</p>
+      <div class="cert-frame">
+        <img id="performaImg" src="" alt="Performance Performa">
+      </div>
+      <div class="actions">
+        <a href="#" id="downloadPerformaBtn" class="btn-primary" download><i class="fa-solid fa-download"></i> Download Performa</a>
+        <a href="#" id="openPerformaBtn" class="btn-secondary" target="_blank" rel="noopener"><i class="fa-solid fa-up-right-from-square"></i> Open Full Size</a>
+      </div>
     </div>
   </div>
 </main>
@@ -705,7 +685,6 @@ main.verify-main{ max-width:760px; margin:0 auto; padding:52px 20px 20px; min-he
 </section>
 
     <!-- Footer -->
-    <!-- Footer -->
     <footer class="site-footer" id="contact">
       <div class="container site-footer__grid">
         <div class="footer-col footer-col--about">
@@ -754,19 +733,19 @@ main.verify-main{ max-width:760px; margin:0 auto; padding:52px 20px 20px; min-he
             </li>
           </ul>
         </div>
- 
+
         <div class="footer-col">
           <h4>QUICK LINKS</h4>
           <ul>
             <li><a href="index.html">Home</a></li>
             <li><a href="about.html">About Us</a></li>
-            <li><a href="#academics">Academics</a></li>
-            <li><a href="#facilities">Faculty</a></li>
+            <li><a href="index.html#academics">Academics</a></li>
+            <li><a href="index.html#facilities">Faculty</a></li>
             <li><a href="certificates.html">Certificates</a></li>
             <li><a href="contact.html">Contact</a></li>
           </ul>
         </div>
- 
+
         <div class="footer-col">
           <h4>ADMISSIONS</h4>
           <ul>
@@ -775,7 +754,7 @@ main.verify-main{ max-width:760px; margin:0 auto; padding:52px 20px 20px; min-he
             <li><a href="prospectus.html">Prospectus</a></li>
           </ul>
         </div>
- 
+
         <div class="footer-col">
           <h4>CONTACT US</h4>
           <ul class="footer-contact">
@@ -791,7 +770,7 @@ main.verify-main{ max-width:760px; margin:0 auto; padding:52px 20px 20px; min-he
           </ul>
         </div>
       </div>
- 
+
       <div class="site-footer__bottom">
         <div class="container site-footer__bottom-inner">
           <p>&copy; 2026 PBFL School System. All Rights Reserved.</p>
@@ -833,6 +812,20 @@ main.verify-main{ max-width:760px; margin:0 auto; padding:52px 20px 20px; min-he
   ];
   // --------------------------------------------------------------------------
 
+  // ---- Performance Performa records ---------------------------------------
+  // One image file per certificate serial (must match a CERTIFICATES.serial).
+  // A student with no matching entry here simply won't show a performa
+  // section — the certificate search still works fine on its own.
+  // Add a new performa the exact same way you add a certificate:
+  //   "SERIAL-NUMBER": "images/FileName.png"
+  const PERFORMANCE = {
+    "PBA-COM-2026-001": "images/Ahmad_Bassam_Performa.png",
+    "PBA-COM-2026-002": "images/Mehr-un-Nisa_Performa.png",
+    "PBA-COM-2026-003": "images/Minahil_Rajpoot_Performa.png",
+    "PBA-COM-2026-004": "images/Muhammad_Azzam_Performa.png",
+  };
+  // --------------------------------------------------------------------------
+
   const input = document.getElementById('serialInput');
   const btn = document.getElementById('searchBtn');
   const stateIdle = document.getElementById('stateIdle');
@@ -845,6 +838,11 @@ main.verify-main{ max-width:760px; margin:0 auto; padding:52px 20px 20px; min-he
   const resImg = document.getElementById('resImg');
   const downloadBtn = document.getElementById('downloadBtn');
   const openBtn = document.getElementById('openBtn');
+
+  const performaWrap = document.getElementById('performaWrap');
+  const performaImg = document.getElementById('performaImg');
+  const downloadPerformaBtn = document.getElementById('downloadPerformaBtn');
+  const openPerformaBtn = document.getElementById('openPerformaBtn');
 
   function showState(which){
     stateIdle.classList.remove('show');
@@ -877,6 +875,22 @@ main.verify-main{ max-width:760px; margin:0 auto; padding:52px 20px 20px; min-he
     downloadBtn.href = match.file;
     downloadBtn.setAttribute('download', match.name.replace(/\s+/g,'_') + '_Certificate.png');
     openBtn.href = match.file;
+
+    // Performance performa, if one exists for this student — shown the
+    // exact same way as the certificate: image + Download + Open Full Size.
+    const perfFile = PERFORMANCE[match.serial.toUpperCase()] || PERFORMANCE[match.serial];
+
+    if(perfFile){
+      performaWrap.style.display = 'block';
+      performaImg.src = perfFile;
+      performaImg.alt = "Performance Performa for " + match.name;
+      downloadPerformaBtn.href = perfFile;
+      downloadPerformaBtn.setAttribute('download', match.name.replace(/\s+/g,'_') + '_Performa.png');
+      openPerformaBtn.href = perfFile;
+    } else {
+      performaWrap.style.display = 'none';
+      performaImg.src = '';
+    }
 
     showState(result);
   }
